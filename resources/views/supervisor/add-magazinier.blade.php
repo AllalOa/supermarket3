@@ -1,0 +1,92 @@
+@extends('layouts.appp')
+
+@section('title', 'Add Magazinier')
+
+@section('content')
+  <div class="bg-white p-6 rounded-xl shadow-sm max-w-4xl mx-auto">
+    
+@if(session('success'))
+    <div class="bg-green-500 text-white text-center p-4 rounded-lg shadow-md mb-5">
+        {{ session('success') }}
+    </div>
+@endif
+    <h2 class="text-2xl font-semibold text-[#2b2d42] mb-6">Add New Magazinier</h2>
+    <form action="{{ route('store.magazinier') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+      @csrf
+
+      <!-- Profile Picture Upload -->
+      <div class="mb-8">
+        <label class="block text-sm font-medium text-[#6c757d] mb-2">Profile Picture</label>
+        <div class="flex items-center gap-4">
+          <div class="w-20 h-20 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 relative">
+            <input 
+              type="file" 
+              id="imageUploadMagazinier" 
+              name="profile_picture"
+              class="opacity-0 absolute w-full h-full cursor-pointer" 
+              accept="image/*"
+            >
+            <img id="previewImageMagazinier" src="" alt="" class="w-full h-full object-cover hidden rounded-full">
+            <i id="uploadPlaceholderMagazinier" class="fas fa-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400"></i>
+          </div>
+          <div>
+            <span class="text-sm text-gray-500">JPEG or PNG, max 2MB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Fields (2 fields per row) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-[#6c757d]">Full Name</label>
+          <input type="text" name="name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#6c757d]">Email</label>
+          <input type="email" name="email" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#6c757d]">Password</label>
+          <input type="password" name="password" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#6c757d]">Phone Number</label>
+          <input type="text" name="phone" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="w-full bg-[#4361ee] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#3f37c9] transition-all">
+        <i class="fas fa-user-plus"></i> Add Magazinier
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Image Preview Functionality
+    document.getElementById('imageUploadMagazinier').addEventListener('change', function(e) {
+      const [file] = e.target.files;
+      const preview = document.getElementById('previewImageMagazinier');
+      const placeholder = document.getElementById('uploadPlaceholderMagazinier');
+      
+      if (file) {
+        // Create a URL for the file object
+        const objectURL = URL.createObjectURL(file);
+        
+        // Display the selected image
+        preview.src = objectURL;
+        preview.classList.remove('hidden');
+        
+        // Hide the placeholder icon
+        placeholder.classList.add('hidden');
+      } else {
+        // If no file is selected, hide preview and show placeholder
+        preview.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+      }
+    });
+  </script>
+@endsection
