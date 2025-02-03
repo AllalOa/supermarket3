@@ -63,4 +63,19 @@ Route::get('/settings', function () {
 })->name('settings');
 
 
+
+//cashier routes
+
+
+Route::get('/newsale', function () {
+    return view('cashier.newsale'); // Replace 'newsale' with the actual Blade view name
+})->name('newsale');
+
+
+Route::get('/MakeAnOrder', function () {
+    return view('cashier.demand2'); 
+})->name('MakeAnOrder');
+
+
+
 require __DIR__.'/auth.php';
