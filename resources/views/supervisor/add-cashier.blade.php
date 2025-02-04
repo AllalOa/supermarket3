@@ -1,5 +1,5 @@
-@extends('layouts.appp')
 
+@extends('layouts.appp')
 
 
 @section('title', 'Add Cashier')

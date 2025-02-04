@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-[#f4f6f9] font-[Poppins] min-h-screen flex">
+<body class="bg-gray-200 font-[Poppins] min-h-screen flex">
 
   <!-- Sidebar -->
   <div class="w-[280px] fixed h-screen bg-gradient-to-br from-[#2b2d42] to-[#1a1b27] text-white shadow-xl p-6">
@@ -47,7 +47,7 @@
 </li>
 
 <li>
-  <a href="{{ route('inventory') }}" 
+  <a href="" 
      class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
      {{ Request::routeIs('inventory') ? 'bg-[#4361ee]' : '' }}">
     <i class="fas fa-tasks"></i> Inventory

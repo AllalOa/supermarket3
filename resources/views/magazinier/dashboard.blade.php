@@ -1,17 +1,39 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('magazinier Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app-magazinier')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
+@section('title', 'Dashboard')
+
+@section('content')
+   <!-- Dashboard Content -->
+   <div id="dashboard" class="content-section">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-[#6c757d]">Total Products</p>
+              <p id="totalProducts" class="text-3xl font-bold text-[#2b2d42]">{{ $totalProducts }}</p>
+
             </div>
+            <i class="fas fa-boxes text-2xl text-[#4361ee]"></i>
+          </div>
         </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-[#6c757d]">Low Stock Items</p>
+              <p id="lowStock" class="text-3xl font-bold text-[#2b2d42]">{{ $lowStockProducts }}</p>
+            </div>
+            <i class="fas fa-exclamation-triangle text-2xl text-[#4361ee]"></i>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-[#6c757d]">Pending Orders</p>
+              <p class="text-3xl font-bold text-[#2b2d42]">3</p>
+            </div>
+            <i class="fas fa-clipboard-list text-2xl text-[#4361ee]"></i>
+          </div>
+        </div>
+      </div>
     </div>
-</x-app-layout>
+@endsection
