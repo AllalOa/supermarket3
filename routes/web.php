@@ -3,6 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
+
+Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -126,6 +130,16 @@ Route::get('/MakeAnOrder', function () {
     return view('cashier.demand2'); 
 })->name('MakeAnOrder');
     // Other cashier routes...
+    Route::get('/newsale', [TransactionController::class, 'showSalePage'])->middleware('auth')->name('cashier.sale');
+    Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
+    Route::get('/start-sale', [TransactionController::class, 'startNewSale'])->middleware('auth')->name('start.sale');
+    Route::get('/end-sale', [TransactionController::class, 'endTransaction'])->middleware('auth')->name('end.sale');
+
+    
+    Route::get('/bill/{billId}/transactions', [TransactionController::class, 'getBillTransactions']);
+
+
+    Route::get('/cashier/dashboard', [TransactionController::class, 'dashboard'])->name('cashier.dashboard');
 });
 
 

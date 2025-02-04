@@ -21,7 +21,7 @@
     <nav>
       <ul class="space-y-2">
         <li>
-          <a href="#" id="posLink" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#4361ee] text-white shadow-md transition-all">
+          <a href="{{ route('cashier.dashboard')}}" id="posLink" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#4361ee] text-white shadow-md transition-all">
             <i class="fas fa-cash-register w-5 text-center"></i>
             POS System
           </a>
@@ -68,8 +68,9 @@
     <!-- Content Section -->
     @yield('content')
     
-    @stack('scripts')
+   
   </div>
- 
+  @stack('styles')
+  @stack('scripts')
 </body>
 </html>

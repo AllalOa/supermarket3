@@ -1,154 +1,303 @@
 @extends('layouts.app-cashier')
 
 @section('content')
-  <!-- New Sale Form -->
-  <div id="newSaleForm" class=" bg-white rounded-xl shadow-sm p-6 mt-6">
-    <div class="grid grid-cols-3 gap-4 mb-4">
-      <input type="text" id="productName" placeholder="Product Name" 
-             class="p-2 border rounded-lg focus:outline-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
-      <input type="number" id="productQty" placeholder="Quantity" min="1" 
-             class="p-2 border rounded-lg focus:outline-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
-      <input type="number" id="productPrice" placeholder="Price" min="0" step="0.01" 
-             class="p-2 border rounded-lg focus:outline-[#4361ee] focus:ring-1 focus:ring-[#4361ee]">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <div class="cashier-container">
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="barcodeInput" placeholder="Enter barcode" autofocus class="input-field" onfocus="setActiveInput('barcodeInput')">
+                <input type="number" id="quantityInput" placeholder="Quantity" value="1" min="1" class="input-field" onfocus="setActiveInput('quantityInput')">
+                <button onclick="addProduct()" class="btn-add">Add Product</button>
+                <button onclick="endTransaction()" class="btn-end">End Transaction</button>
+            </div>
+
+            <!-- Numeric Keypad -->
+            <div class="numeric-keypad">
+                <button onclick="appendNumber('1')" class="keypad-btn">1</button>
+                <button onclick="appendNumber('2')" class="keypad-btn">2</button>
+                <button onclick="appendNumber('3')" class="keypad-btn">3</button>
+                <button onclick="appendNumber('4')" class="keypad-btn">4</button>
+                <button onclick="appendNumber('5')" class="keypad-btn">5</button>
+                <button onclick="appendNumber('6')" class="keypad-btn">6</button>
+                <button onclick="appendNumber('7')" class="keypad-btn">7</button>
+                <button onclick="appendNumber('8')" class="keypad-btn">8</button>
+                <button onclick="appendNumber('9')" class="keypad-btn">9</button>
+                <button onclick="appendNumber('0')" class="keypad-btn zero-btn">0</button>
+                <button onclick="clearInput()" class="keypad-btn clear-btn">C</button>
+            </div>
+        </div>
+
+        <!-- Bill Preview (Hidden Initially) -->
+        <div id="billPreview" class="hidden">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-[#2b2d42]">Supermarket Pro</h2>
+                <p class="text-sm text-gray-500">123 Main Street, City</p>
+                <p class="text-sm text-gray-500 mt-2">Tel: (555) 123-4567</p>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-sm text-gray-500">Bill ID: <span id="billId">{{ $billId ?? 'N/A' }}</span></p>
+            
+            </div>
+
+            <table class="w-full mb-4">
+                <thead>
+                    <tr class="border-b">
+                        <th class="text-left pb-2 text-sm font-semibold">Product</th>
+                        <th class="text-center pb-2 text-sm font-semibold">Qty</th>
+                        <th class="text-right pb-2 text-sm font-semibold">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="billItems"></tbody>
+            </table>
+
+            <div class="border-t pt-4">
+                <div class="flex justify-between mb-2 font-semibold text-lg">
+                    <span>Total:</span>
+                    <span id="billTotal">0.00 DA</span>
+                </div>
+                <div class="text-sm text-gray-500 mt-4">
+                    <p>Cashier: <span id="cashierName">{{ auth()->user()->name }}</span></p>
+                    <p class="text-sm text-gray-500">Date: <span id="saleDate">{{ $saleDate }}</span></p>
+                    <p class="text-sm text-gray-500">Time: <span id="saleTime">{{ $saleTime }}</span></p>
+                    <p>Thank you for shopping with us!</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="flex gap-3">
-      <button id="addItemBtn" class="bg-[#4361ee] text-white px-6 py-2 rounded-lg hover:bg-[#3f37c9] transition">
-        Add Item
-      </button>
-      <button id="printBillBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
-        Complete Sale
-      </button>
-    </div>
-  </div>
-
-  <!-- Right Section - Bill Preview -->
-  <div id="billPreview" class="hidden w-[400px] bg-white rounded-xl shadow-sm p-6 h-fit sticky top-8">
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-[#2b2d42]">Supermarket Pro</h2>
-      <p class="text-sm text-gray-500">123 Main Street, City</p>
-      <p class="text-sm text-gray-500 mt-2">Tel: (555) 123-4567</p>
-    </div>
-
-    <div class="mb-4">
-      <p class="text-sm text-gray-500">Transaction ID: <span id="trxId">TRX-001246</span></p>
-      <p class="text-sm text-gray-500">Date: <span id="saleDate"></span></p>
-      <p class="text-sm text-gray-500">Time: <span id="saleTime"></span></p>
-    </div>
-
-    <table class="w-full mb-4">
-      <thead>
-        <tr class="border-b">
-          <th class="text-left pb-2 text-sm font-semibold">Product</th>
-          <th class="text-center pb-2 text-sm font-semibold">Qty</th>
-          <th class="text-right pb-2 text-sm font-semibold">Total</th>
-        </tr>
-      </thead>
-      <tbody id="billItems">
-        <!-- Items will be added here dynamically -->
-      </tbody>
-    </table>
-
-    <div class="border-t pt-4">
-      <div class="flex justify-between mb-2 font-semibold text-lg">
-        <span>Total:</span>
-        <span id="billTotal">$0.00</span>
-      </div>
-      <div class="text-sm text-gray-500 mt-4">
-        <p>Cashier: John Doe</p>
-        <p>Thank you for shopping with us!</p>
-      </div>
-    </div>
-  </div>
-
-@push('scripts') 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const newSaleBtn = document.getElementById('newSaleBtn');
-      const recentTransactions = document.getElementById('recentTransactions');
-      const newSaleForm = document.getElementById('newSaleForm');
-      const billPreview = document.getElementById('billPreview');
-      const billItems = document.getElementById('billItems');
-      const billTotal = document.getElementById('billTotal');
-      const saleDate = document.getElementById('saleDate');
-      const saleTime = document.getElementById('saleTime');
-
-      let currentTotal = 0;
-      let items = [];
-      let saleStarted = false;
-
-      // Event listener for starting new sale
-      newSaleBtn.addEventListener('click', () => {
-        console.log("New Sale button clicked!");
-        recentTransactions.classList.add('hidden');
-        newSaleForm.classList.remove('hidden');
-        newSaleBtn.classList.add('hidden');
-        const now = new Date();
-        saleDate.textContent = now.toLocaleDateString();
-        saleTime.textContent = now.toLocaleTimeString();
-        saleStarted = true;
-      });
-
-      // Event listener for adding items to the bill
-      document.getElementById('addItemBtn').addEventListener('click', () => {
-        const name = document.getElementById('productName').value;
-        const qty = parseInt(document.getElementById('productQty').value);
-        const price = parseFloat(document.getElementById('productPrice').value);
-
-        if (name && qty > 0 && price > 0) {
-          if (!billPreview.classList.contains('hidden')) {
-            billPreview.classList.remove('hidden');
-          }
-
-          const total = qty * price;
-          items.push({ name, qty, price, total });
-
-          const newRow = document.createElement('tr');
-          newRow.className = 'border-b';
-          newRow.innerHTML = `
-            <td class="py-2 text-sm">${name}</td>
-            <td class="text-center text-sm">${qty}</td>
-            <td class="text-right text-sm">$${total.toFixed(2)}</td>
-          `;
-          billItems.appendChild(newRow);
-
-          currentTotal += total;
-          billTotal.textContent = `$${currentTotal.toFixed(2)}`;
-
-          // Clear inputs
-          document.getElementById('productName').value = '';
-          document.getElementById('productQty').value = '';
-          document.getElementById('productPrice').value = '';
-        }
-      });
-
-      // Event listener for completing the sale
-      document.getElementById('printBillBtn').addEventListener('click', () => {
-        // Add transaction to recent transactions
-        const newTransaction = document.createElement('div');
-        newTransaction.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg';
-        newTransaction.innerHTML = `
-          <div>
-            <p class="font-medium text-[#2b2d42]">TRX-001246</p>
-            <p class="text-sm text-[#6c757d]">${new Date().toLocaleString()}</p>
-          </div>
-          <span class="text-[#4361ee] font-semibold">$${currentTotal.toFixed(2)}</span>
-        `;
-        recentTransactions.querySelector('div.space-y-3').prepend(newTransaction);
-
-        // Reset everything
-        billItems.innerHTML = '';
-        currentTotal = 0;
-        billTotal.textContent = '$0.00';
-        items = [];
-        recentTransactions.classList.remove('hidden');
-        newSaleForm.classList.add('hidden');
-        newSaleBtn.classList.remove('hidden');
-        billPreview.classList.add('hidden');
-        saleStarted = false;
-      });
-    });
-  </script>
-@endpush
 @endsection
 
+@push('styles')
+<style>
+/* Ensure the body and html take full height and prevent scrolling */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling */
+}
 
+/* Cashier Container */
+.cashier-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    height: calc(100vh - 60px); /* Adjust height to account for navbar */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px; /* Reduced top and bottom padding */
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Input Section */
+.input-section {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    max-height: 100%; /* Ensure it doesn't overflow */
+    margin-top: 20px; /* Raise the input section higher */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+}
+
+/* Input Fields */
+.input-field {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    width: 100%;
+}
+
+/* Numeric Keypad */
+.numeric-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 10px;
+    width: 200px;
+    max-height: 100%; /* Ensure it doesn't overflow */
+}
+
+.keypad-btn {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.keypad-btn:hover {
+    background-color: #e9e9e9;
+}
+
+.zero-btn {
+    grid-column: span 2; /* Make the "0" button span 2 columns */
+}
+
+.clear-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.clear-btn:hover {
+    background-color: #c82333;
+}
+
+/* Buttons */
+.btn-add, .btn-end {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+
+.btn-end {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-end:hover {
+    background-color: #c82333;
+}
+
+/* Bill Preview */
+#billPreview {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    padding: 20px;
+    margin-left: 20px;
+    max-height: calc(100vh - 100px); /* Ensure it fits within the viewport */
+    overflow-y: auto; /* Add scroll only to the bill preview if needed */
+}
+
+/* Hidden Class */
+.hidden {
+    display: none;
+}
+
+/* When bill is shown, adjust the layout */
+.cashier-container.bill-shown {
+    justify-content: flex-start;
+}
+
+.cashier-container.bill-shown .input-section {
+    flex: 1;
+}
+
+.cashier-container.bill-shown #billPreview {
+    display: block;
+}
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    let activeInput = null; // Track the currently focused input
+
+    // Function to set the active input
+    function setActiveInput(inputId) {
+        activeInput = document.getElementById(inputId);
+    }
+
+    // Function to append a number to the active input
+    function appendNumber(number) {
+        if (activeInput) {
+            activeInput.value += number;
+        }
+    }
+
+    // Function to clear the active input
+    function clearInput() {
+        if (activeInput) {
+            activeInput.value = '';
+        }
+    }
+
+    // Function to add a product to the bill
+    function addProduct() {
+        let barcode = document.getElementById('barcodeInput').value;
+        let quantity = document.getElementById('quantityInput').value || 1;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/newsale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ barcode, quantity })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Show the bill preview if it's hidden
+            const billPreview = document.getElementById('billPreview');
+            const cashierContainer = document.querySelector('.cashier-container');
+            if (billPreview.classList.contains('hidden')) {
+                billPreview.classList.remove('hidden');
+                cashierContainer.classList.add('bill-shown'); // Add the class to change the layout
+            }
+
+            // Update the bill preview
+            updateBillPreview(data.transaction, data.bill);
+
+            // Clear inputs
+            document.getElementById('barcodeInput').value = '';
+            clearInput();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Function to update the bill preview
+    function updateBillPreview(transaction, bill) {
+        const billItems = document.getElementById('billItems');
+        const billTotal = document.getElementById('billTotal');
+
+        // Add the new item to the bill
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td class="text-left py-2 text-sm">${transaction.name}</td>
+            <td class="text-center py-2 text-sm">${transaction.quantity}</td>
+            <td class="text-right py-2 text-sm">${transaction.total.toFixed(2)} DA</td>
+        `;
+        billItems.appendChild(newRow);
+
+        // Update the total
+        billTotal.textContent = `${bill.total.toFixed(2)} DA`;
+    }
+
+    // Function to end the transaction
+    function endTransaction() {
+        if (confirm('Are you sure you want to end this transaction?')) {
+            window.location.href = "{{ route('end.sale') }}";
+        }
+    }
+</script>
+@endpush
