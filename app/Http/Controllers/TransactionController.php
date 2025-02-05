@@ -60,14 +60,16 @@ class TransactionController extends Controller
         }
 
         $quantity = $request->quantity ?? 1;
-        $total = $product->price * $quantity;
+       
+        $total = $product->unit_price * $quantity;
 
         // Create transaction
         $transaction = Transaction::create([
             'bill_id' => $billId,
             'product_id' => $product->id,
             'quantity' => $quantity,
-            'price' => $product->price,
+            'price' => $product->unit_price,
+
             'total' => $total
         ]);
 
@@ -81,6 +83,7 @@ class TransactionController extends Controller
                 'name' => $product->name,
                 'quantity' => $transaction->quantity,
                 'price' => $transaction->price,
+                
                 'total' => $transaction->total
             ],
             'bill' => $bill
@@ -128,7 +131,7 @@ public function dashboard()
         $query->where('cashier_id', $cashierId);
     })
     ->orderBy('created_at', 'desc')
-    ->take(5)
+    ->take(10)
     ->get();
     
 

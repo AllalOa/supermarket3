@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller {
@@ -40,7 +41,9 @@ public function index()
 {
     $lowStockProducts = Product::where('quantity', '<', 5)->count();
     $totalProducts = Product::count(); // Get total number of products
-    return view('magazinier.dashboard', compact('totalProducts','lowStockProducts'));
+    $pendingOrders = Order::where('status', 'pending')->count(); // Count pending orders
+
+    return view('magazinier.dashboard', compact('totalProducts', 'lowStockProducts', 'pendingOrders'));
 }
 
 public function edit($id)
@@ -77,6 +80,20 @@ public function destroy($id)
     $product->delete(); // Delete the product
 
     return redirect()->route('magazinier.inventory')->with('success', 'Product deleted successfully');
+}
+
+
+
+public function getProductPrice($productName)
+{
+    // Find the product by name
+    $product = Product::where('name', $productName)->first();
+
+    if ($product) {
+        return response()->json(['price' => $product->price]); // Assuming 'price' is a column in the products table
+    } else {
+        return response()->json(['error' => 'Produit non trouvé'], 404);
+    }
 }
 
 }

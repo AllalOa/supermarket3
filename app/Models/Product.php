@@ -16,4 +16,10 @@ class Product extends Model {
         'price',
         'unit_price'
     ];
+
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id');
+    }
 }

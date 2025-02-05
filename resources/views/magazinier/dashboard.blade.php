@@ -29,7 +29,7 @@
           <div class="flex justify-between items-center">
             <div>
               <p class="text-[#6c757d]">Pending Orders</p>
-              <p class="text-3xl font-bold text-[#2b2d42]">3</p>
+              <p class="text-3xl font-bold text-[#2b2d42]">{{ $pendingOrders }}</p>
             </div>
             <i class="fas fa-clipboard-list text-2xl text-[#4361ee]"></i>
           </div>

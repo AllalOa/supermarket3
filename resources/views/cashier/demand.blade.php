@@ -185,8 +185,6 @@
   </style>
 </head>
 <body>
-
-
   <!-- Original Form Container -->
   <div class="form-container">
     <div class="product-list-container">
@@ -196,15 +194,15 @@
           <tr>
             <th>Produit</th>
             <th>Quantité</th>
-            <th>Prix </th>
-            <th>Total</th>
+            <th>Prix Unitaire (€)</th>
+            <th>Total (€)</th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
       <div class="total-container">
-        <strong>Total de la Commande : </strong><span id="total-price">0.00</span> 
+        <strong>Total de la Commande : </strong><span id="total-price">0.00</span> €
       </div>
       <div class="product-list-actions">
         <button type="button" onclick="window.print();">Imprimer la Demande</button>
@@ -214,36 +212,32 @@
     <div class="form-content">
       <h2>Demande de Produits</h2>
       <h4>Num Demande :</h4>
-      <form id="request-form" method="POST" action="{{ route('cashier.MakeAnOrder') }}">
-    @csrf
+      <form id="request-form" method="get" action="your-server-endpoint">
+        <label for="name">Nom du Demandeur :</label>
+        <input type="text" id="name" name="name" required>
 
+        <label for="destination">Destination :</label>
+        <input type="text" id="destination" name="destination" required>
 
-    <h4>Ajouter un produit</h4>
-    <label for="product">Produit :</label>
-    <input type="text" id="product" name="product" >
+        <h4>Ajouter un produit</h4>
+        <label for="product">Produit :</label>
+        <input type="text" id="product" name="product" required>
 
-    <label for="quantity">Quantité :</label>
-    <input type="number" id="quantity" name="quantity">
+        <label for="quantity">Quantité :</label>
+        <input type="number" id="quantity" name="quantity" required min="1">
 
-    <button type="button" id="add-product">Ajouter le Produit</button>
+        <button type="button" id="add-product">Ajouter le Produit</button>
 
-
-    <input type="hidden" name="products_json" id="products_json">
-
-
-
-    
-        <button type="submit">Envoyer la Demande</button>
-    
-</form>
-
+        <div class="form-actions">
+          <button type="submit">Envoyer la Demande</button>
+          <button type="button" id="finish-button">Finir</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- Confirmation Page -->
   <div id="confirmation-page">
-
-
     <h2>Demande Finalisée</h2>
     <p><strong>Nom du Demandeur:</strong> <span id="confirmation-name"></span></p>
     
@@ -252,8 +246,8 @@
         <tr>
           <th>Produit</th>
           <th>Quantité</th>
-          <th>Prix</th>
-          <th>Total</th>
+          <th>Prix Unitaire (€)</th>
+          <th>Total (€)</th>
         </tr>
       </thead>
       <tbody id="confirmation-products">
@@ -261,7 +255,7 @@
     </table>
 
     <div class="total-container">
-      <strong>Total de la Commande : </strong><span id="confirmation-total">0.00</span> 
+      <strong>Total de la Commande : </strong><span id="confirmation-total">0.00</span> €
     </div>
 
     <div class="signature-section">
@@ -271,79 +265,63 @@
   </div>
 
   <script>
- let productsArray = []; // Initialize the products array
+    // Original Product Addition Logic
+    const addProductButton = document.getElementById('add-product');
+    const productList = document.getElementById('product-list').querySelector('tbody');
+    const totalPriceElement = document.getElementById('total-price');
 
-document.getElementById('add-product').addEventListener('click', async () => {
-    const productName = document.getElementById('product').value;
-    const quantity = parseInt(document.getElementById('quantity').value, 10);
+    addProductButton.addEventListener('click', () => {
+      const product = document.getElementById('product').value;
+      const quantity = document.getElementById('quantity').value;
+      const pricePerUnit = 10; // Example fixed unit price
+      const total = (quantity * pricePerUnit).toFixed(2);
 
-    if (!productName || quantity <= 0) {
+      if (product && quantity > 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${product}</td>
+          <td>${quantity}</td>
+          <td>${pricePerUnit}</td>
+          <td>${total}</td>
+        `;
+        productList.appendChild(row);
+
+        const currentTotal = parseFloat(totalPriceElement.textContent) || 0;
+        totalPriceElement.textContent = (currentTotal + parseFloat(total)).toFixed(2);
+
+        document.getElementById('product').value = '';
+        document.getElementById('quantity').value = '';
+      } else {
         alert('Veuillez saisir un produit et une quantité valides.');
-        return;
-    }
+      }
+    });
 
-    try {
-        // Fetch the price from the server
-        const response = await fetch(`/get-product-price/${encodeURIComponent(productName)}`);
-        const data = await response.json();
+    // Confirmation Page Logic
+    document.getElementById('finish-button').addEventListener('click', () => {
+      // Hide original form
+      document.querySelector('.form-container').style.display = 'none';
+      
+      // Show confirmation page
+      const confirmationPage = document.getElementById('confirmation-page');
+      confirmationPage.style.display = 'block';
 
-        if (response.ok) {
-            const pricePerUnit = parseFloat(data.price);
-            const total = (quantity * pricePerUnit).toFixed(2);
+      // Populate confirmation data
+      document.getElementById('confirmation-name').textContent = 
+        document.getElementById('name').value;
 
-            // Create a new row
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${productName}</td>
-                <td>${quantity}</td>
-                <td>${pricePerUnit.toFixed(2)} </td>
-                <td>${total} </td>
-                <td>
-                    <button type="button" onclick="removeProduct(this, '${productName}')" 
-                        style="background: none; border: none; color: red; font-size: 1.2rem; cursor: pointer;">
-                        ❌
-                    </button>
-                </td>
-            `;
-            document.querySelector('#product-list tbody').appendChild(row);
+      // Clone products table
+      const originalRows = document.querySelectorAll('#product-list tbody tr');
+      const confirmationTbody = document.getElementById('confirmation-products');
+      confirmationTbody.innerHTML = '';
 
-            // Add to products array
-            productsArray.push({ name: productName, quantity, price: pricePerUnit });
-            updateProductsJson();
-            updateTotal();
+      originalRows.forEach(row => {
+        confirmationTbody.appendChild(row.cloneNode(true));
+      });
 
-            // Clear input fields
-            document.getElementById('product').value = '';
-            document.getElementById('quantity').value = '';
-        } else {
-            alert(data.error);
-        }
-    } catch (error) {
-        console.error('Erreur lors de la récupération du prix:', error);
-        alert('Erreur lors de la récupération du prix du produit.');
-    }
-});
-
-function removeProduct(button, productName) {
-    // Remove the row from the table
-    button.parentElement.parentElement.remove();
-
-    // Remove the product from the array
-    productsArray = productsArray.filter(p => p.name !== productName);
-    
-    updateProductsJson();
-    updateTotal();
-}
-
-function updateProductsJson() {
-    document.getElementById('products_json').value = JSON.stringify(productsArray);
-}
-
-function updateTotal() {
-    let totalPrice = productsArray.reduce((sum, product) => sum + (product.quantity * product.price), 0);
-    document.getElementById('total-price').textContent = totalPrice.toFixed(2) + "DA";
-}
-
+      // Set total price
+      document.getElementById('confirmation-total').textContent = 
+        document.getElementById('total-price').textContent;
+    });
   </script>
 </body>
 </html>

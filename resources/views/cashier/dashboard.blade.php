@@ -2,6 +2,11 @@
     
 @section('content')
   <!-- Add your custom content for the cashier dashboard here -->
+  @if (session('success'))
+    <div class="bg-green-400 text-white p-4 rounded-md mb-4">
+        {{ session('success') }}
+    </div>
+@endif
 
   <div class="flex gap-8">
     <!-- Left Section -->

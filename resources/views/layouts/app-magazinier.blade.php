@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supermarket Pro - @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -50,11 +52,11 @@
         </a>
     </li>
     <li>
-        <a href="{{ route('receiveOrder') }}" 
+        <a href="{{ route('magazinier.orders') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('receiveOrder') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('magazinier.orders') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-truck-loading w-5 text-center"></i>
-            Receive Orders
+            Received Orders
         </a>
     </li>
 </ul>

@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
-
+use App\Http\Controllers\OrderController;
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
 
 
@@ -107,6 +107,11 @@ Route::middleware('rolemanager:magazinier')->group(function () {
     Route::put('/products/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     // Other magazinier routes...
+
+    Route::get('/magazinier/orders', [OrderController::class, 'showPendingOrders'])->name('magazinier.orders');
+    Route::put('/magazinier/orders/{id}/validate', [OrderController::class, 'validateOrder'])->name('magazinier.validateOrder');
+Route::put('/magazinier/orders/{id}/reject', [OrderController::class, 'rejectOrder'])->name('magazinier.rejectOrder');
+ 
 });
 
 
@@ -140,11 +145,21 @@ Route::get('/MakeAnOrder', function () {
 
 
     Route::get('/cashier/dashboard', [TransactionController::class, 'dashboard'])->name('cashier.dashboard');
+
+    Route::post('/Order', [OrderController::class, 'createOrder'])->name('cashier.MakeAnOrder');
+   
+    Route::get('/orders', [OrderController::class, 'listOrdersForMagazinier']);
+    Route::post('/orders/{order}/update', [OrderController::class, 'updateOrderStatus']);
+
 });
 
 
 
 
 
+// test order
+
+
+Route::get('/get-product-price/{productName}', [ProductController::class, 'getProductPrice']);
 
 require __DIR__.'/auth.php';
