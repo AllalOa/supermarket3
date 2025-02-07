@@ -19,32 +19,40 @@
       </h4>
     </div>
     <nav>
-      <ul class="space-y-2">
-        <li>
-          <a href="{{ route('cashier.dashboard')}}" id="posLink" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#4361ee] text-white shadow-md transition-all">
+    <ul class="space-y-2">
+    <li>
+        <a href="{{ route('cashier.dashboard')}}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('cashier.dashboard') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white transition-all' }}">
             <i class="fas fa-cash-register w-5 text-center"></i>
             POS System
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('MakeAnOrder')}}" id="makeOrderLink" class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all">
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('MakeAnOrder')}}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('MakeAnOrder') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white transition-all' }}">
             <i class="fas fa-shopping-cart w-5 text-center"></i>
             Make an Order
-          </a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all">
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('cashier.orders') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('cashier.orders') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white transition-all' }}">
             <i class="fas fa-history w-5 text-center"></i>
-            Transaction History
-          </a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all">
+            My Orders History
+        </a>
+    </li>
+    <li>
+        <a href="#" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all">
             <i class="fas fa-cog w-5 text-center"></i>
             Settings
-          </a>
-        </li>
-      </ul>
+        </a>
+    </li>
+</ul>
+
     </nav>
   </div>
 

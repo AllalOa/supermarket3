@@ -1,8 +1,34 @@
 @extends('layouts.app-magazinier')
 
 @section('content')
+
+
+
+
 <div class="container mx-auto p-6" x-data="{ showModal: false, selectedOrder: null }">
     <h2 class="text-2xl font-bold mb-4">Pending Orders</h2>
+
+
+
+    {{-- ✅ Success Message --}}
+    @if(session('success'))
+        <div class="mb-4 flex items-center justify-between bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('success') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-green-700 hover:text-green-900">
+                ✖
+            </button>
+        </div>
+    @endif
+
+    {{-- ❌ Error Message --}}
+    @if(session('error'))
+        <div class="mb-4 flex items-center justify-between bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('error') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-red-700 hover:text-red-900">
+                ✖
+            </button>
+        </div>
+    @endif
     
     <div class="bg-white shadow-md rounded-lg p-4">
         <table class="w-full border-collapse border border-gray-300">
@@ -32,18 +58,18 @@
                         <td class="border border-gray-300 px-4 py-2 text-center">
                             <div class="flex space-x-2 justify-center">
                                 <!-- Accept Button -->
-                                <form action="{{ route('magazinier.validateOrder', $order->id) }}" method="POST">
+                                <form action="{{ route('orders.approve', $order->id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
+                                    @method('POST')
                                     <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition">
                                          Validate
                                     </button>
                                 </form>
 
                                 <!-- Reject Button -->
-                                <form action="{{ route('magazinier.rejectOrder', $order->id) }}" method="POST">
+                                <form action="{{ route('orders.reject', $order->id) }}" method="POST">
                                     @csrf
-                                    @method('PUT')
+                                    @method('POST')
                                     <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                          Reject
                                     </button>

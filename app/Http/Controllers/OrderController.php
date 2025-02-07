@@ -61,20 +61,58 @@ class OrderController extends Controller
     public function validateOrder($id)
     {
         $order = Order::findOrFail($id);
+        $orderDetails = OrderDetail::where('order_id', $id)->get();
+    
+        foreach ($orderDetails as $detail) {
+            $product = Product::findOrFail($detail->product_id);
+    
+            if ($product->quantity < $detail->quantity) {
+                return redirect()->back()->with('error', 'Stock insuffisant pour : ' . $product->name);
+            }
+        }
+    
+        foreach ($orderDetails as $detail) {
+            $product = Product::findOrFail($detail->product_id);
+            $product->quantity -= $detail->quantity;
+            $product->save();
+    
+            $detail->status = 'approved';
+            $detail->save();
+        }
+    
         $order->status = 'approved';
         $order->save();
     
         return redirect()->back()->with('success', 'Commande validée avec succès.');
     }
     
+    
+    
     public function rejectOrder($id)
-    {
-        $order = Order::findOrFail($id);
-        $order->status = 'rejected';
-        $order->save();
-    
-        return redirect()->back()->with('error', 'Commande rejetée.');
+{
+    $order = Order::findOrFail($id);
+    $orderDetails = OrderDetail::where('order_id', $id)->get();
+
+    foreach ($orderDetails as $detail) {
+        $detail->status = 'rejected';
+        $detail->save();
     }
-    
+
+    $order->status = 'rejected';
+    $order->save();
+
+    return redirect()->back()->with('error', 'Commande rejetée.');
+}
+
+ 
+
+// return cashier orders 
+public function cashierOrders()
+{
+    $orders = Order::where('cashier_id', auth()->id())->with('details.product')->orderBy('created_at', 'desc')->get();
+
+    return view('cashier.orders', compact('orders'));
+}
+
 
 }

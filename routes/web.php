@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\OrderController;
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
@@ -52,6 +54,18 @@ Route::get('/dashboard', function () {
 // Apply role middleware to supervisor routes
 Route::middleware('rolemanager:supervisor')->group(function () {
     
+    Route::get('/supervisor/dashboard', [SupervisorDashboardController::class, 'index'])
+    ->name('supervisor.dashboard');
+
+    Route::get('/supervisor/cashiers', [SupervisorDashboardController::class, 'getCashiers'])
+    ->name('supervisor.cashiers');
+
+Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'getMagaziniers'])
+    ->name('supervisor.magaziniers');
+ 
+    Route::get('/supervisor/low-stock-items', [SupervisorController::class, 'getLowStockItems'])
+    ->name('supervisor.lowStockItems');
+
     Route::get('/inventory', function () {
         return view('magazinier.inventory'); 
     })->name('supervisor.inventory');
@@ -77,6 +91,7 @@ Route::middleware('rolemanager:supervisor')->group(function () {
         return view('settings');
     })->name('settings');
     // Other supervisor routes...
+    Route::get('/supervisor/inventory', [InventoryController::class, 'index'])->name('supervisor.inventory');
 });
 
 // Apply role middleware to magazinier routes
@@ -109,8 +124,8 @@ Route::middleware('rolemanager:magazinier')->group(function () {
     // Other magazinier routes...
 
     Route::get('/magazinier/orders', [OrderController::class, 'showPendingOrders'])->name('magazinier.orders');
-    Route::put('/magazinier/orders/{id}/validate', [OrderController::class, 'validateOrder'])->name('magazinier.validateOrder');
-Route::put('/magazinier/orders/{id}/reject', [OrderController::class, 'rejectOrder'])->name('magazinier.rejectOrder');
+    Route::post('/orders/{id}/approve', [OrderController::class, 'validateOrder'])->name('orders.approve');
+    Route::post('/orders/{id}/reject', [OrderController::class, 'rejectOrder'])->name('orders.reject');
  
 });
 
@@ -150,6 +165,7 @@ Route::get('/MakeAnOrder', function () {
    
     Route::get('/orders', [OrderController::class, 'listOrdersForMagazinier']);
     Route::post('/orders/{order}/update', [OrderController::class, 'updateOrderStatus']);
+    Route::get('/cashier/orders', [OrderController::class, 'cashierOrders'])->name('cashier.orders');
 
 });
 

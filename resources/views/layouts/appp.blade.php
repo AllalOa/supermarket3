@@ -20,57 +20,56 @@
       </h4>
     </div>
     <nav>
-      <ul class="space-y-2">
-       
-      <li>
-  <a href="{{ route('supervisor.dashboard') }}" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('supervisor.dashboard') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-home"></i> Dashboard
-  </a>
-</li>
+    <ul class="space-y-2">
+    <li>
+        <a href="{{ route('supervisor.dashboard') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('supervisor.dashboard') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-home w-5 text-center"></i> Dashboard
+        </a>
+    </li>
 
-<li>
-  <a href="{{ route('add.cashier') }}" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('add.cashier') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-user-plus"></i> Add Cashier
-  </a>
-</li>
+    <li>
+        <a href="{{ route('add.cashier') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('add.cashier') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-user-plus w-5 text-center"></i> Add Cashier
+        </a>
+    </li>
 
-<li>
-  <a href="{{ route('add.magazinier') }}" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('add.magazinier') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-boxes"></i> Add Magazinier
-  </a>
-</li>
+    <li>
+        <a href="{{ route('add.magazinier') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('add.magazinier') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-boxes w-5 text-center"></i> Add Magazinier
+        </a>
+    </li>
 
-<li>
-  <a href="" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('inventory') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-tasks"></i> Inventory
-  </a>
-</li>
+    <li>
+        <a href="{{ route('supervisor.inventory') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('supervisor.inventory') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-tasks w-5 text-center"></i> Inventory
+        </a>
+    </li>
 
-<li>
-  <a href="{{ route('analytics') }}" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('analytics') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-chart-line"></i> Analytics
-  </a>
-</li>
+    <li>
+        <a href="{{ route('analytics') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('analytics') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-chart-line w-5 text-center"></i> Analytics
+        </a>
+    </li>
 
-<li>
-  <a href="{{ route('settings') }}" 
-     class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 
-     {{ Request::routeIs('settings') ? 'bg-[#4361ee]' : '' }}">
-    <i class="fas fa-cog"></i> Settings
-  </a>
-</li>
+    <li>
+        <a href="{{ route('settings') }}" 
+           class="flex items-center gap-3 px-4 py-3 rounded-lg 
+           {{ request()->routeIs('settings') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+            <i class="fas fa-cog w-5 text-center"></i> Settings
+        </a>
+    </li>
+</ul>
 
-    </ul>
     </nav>
   </div>
 

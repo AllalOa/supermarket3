@@ -2,11 +2,25 @@
     
 @section('content')
   <!-- Add your custom content for the cashier dashboard here -->
-  @if (session('success'))
-    <div class="bg-green-400 text-white p-4 rounded-md mb-4">
-        {{ session('success') }}
-    </div>
-@endif
+  {{-- ✅ Success Message --}}
+    @if(session('success'))
+        <div class="mb-4 flex items-center justify-between bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('success') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-green-700 hover:text-green-900">
+                ✖
+            </button>
+        </div>
+    @endif
+
+    {{-- ❌ Error Message --}}
+    @if(session('error'))
+        <div class="mb-4 flex items-center justify-between bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('error') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-red-700 hover:text-red-900">
+                ✖
+            </button>
+        </div>
+    @endif
 
   <div class="flex gap-8">
     <!-- Left Section -->

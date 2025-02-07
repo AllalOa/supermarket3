@@ -30,7 +30,7 @@
     <li>
         <a href="{{ route('magazinier.dashboard') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('magazinier.dashboard') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('magazinier.dashboard') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-home w-5 text-center"></i>
             Dashboard
         </a>
@@ -38,7 +38,7 @@
     <li>
         <a href="{{ route('magazinier.inventory') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('magazinier.inventory') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('magazinier.inventory') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-boxes w-5 text-center"></i>
             Manage Inventory
         </a>
@@ -46,7 +46,7 @@
     <li>
         <a href="{{ route('addProduct') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('addProduct') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('addProduct') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-plus-circle w-5 text-center"></i>
             Add Product
         </a>
@@ -54,12 +54,13 @@
     <li>
         <a href="{{ route('magazinier.orders') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('magazinier.orders') ? 'bg-[#4361ee] text-white shadow-md' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('magazinier.orders') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-truck-loading w-5 text-center"></i>
             Received Orders
         </a>
     </li>
 </ul>
+
 
         </nav>
     </div>

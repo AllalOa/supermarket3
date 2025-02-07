@@ -5,11 +5,25 @@
 @section('content')
   <div class="bg-white p-6 rounded-xl shadow-sm max-w-4xl mx-auto">
     
-@if(session('success'))
-    <div class="bg-green-500 text-white text-center p-4 rounded-lg shadow-md mb-5">
-        {{ session('success') }}
-    </div>
-@endif
+  {{-- ✅ Success Message --}}
+    @if(session('success'))
+        <div class="mb-4 flex items-center justify-between bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('success') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-green-700 hover:text-green-900">
+                ✖
+            </button>
+        </div>
+    @endif
+
+    {{-- ❌ Error Message --}}
+    @if(session('error'))
+        <div class="mb-4 flex items-center justify-between bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow">
+            <span class="font-medium">{{ session('error') }}</span>
+            <button onclick="this.parentElement.remove();" class="text-red-700 hover:text-red-900">
+                ✖
+            </button>
+        </div>
+    @endif
     <h2 class="text-2xl font-semibold text-[#2b2d42] mb-6">Add New Magazinier</h2>
     <form action="{{ route('store.magazinier') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
       @csrf

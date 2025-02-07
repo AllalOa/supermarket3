@@ -46,6 +46,8 @@ public function index()
     return view('magazinier.dashboard', compact('totalProducts', 'lowStockProducts', 'pendingOrders'));
 }
 
+
+
 public function edit($id)
 {
     $product = Product::findOrFail($id); // Get the product by ID
