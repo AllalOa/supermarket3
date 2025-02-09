@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\OrderController;
+use App\Models\Product;
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
 
 
@@ -63,7 +64,7 @@ Route::middleware('rolemanager:supervisor')->group(function () {
 Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'getMagaziniers'])
     ->name('supervisor.magaziniers');
  
-    Route::get('/supervisor/low-stock-items', [SupervisorController::class, 'getLowStockItems'])
+    Route::get('/supervisor/low-stock-items', [SupervisorDashboardController::class, 'getLowStockItems'])
     ->name('supervisor.lowStockItems');
 
     Route::get('/inventory', function () {
@@ -166,6 +167,8 @@ Route::get('/MakeAnOrder', function () {
     Route::get('/orders', [OrderController::class, 'listOrdersForMagazinier']);
     Route::post('/orders/{order}/update', [OrderController::class, 'updateOrderStatus']);
     Route::get('/cashier/orders', [OrderController::class, 'cashierOrders'])->name('cashier.orders');
+
+    Route::get('/get-product-price/{productId}', [ProductController::class, 'getProductPrice']);
 
 });
 

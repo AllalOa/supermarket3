@@ -65,9 +65,15 @@
         <p class="text-[#6c757d]">Ready to process sales</p>
       </div>
       <div class="flex items-center gap-3">
-        <img src="https://via.placeholder.com/40" class="rounded-full w-10 h-10" alt="User">
+        @if(Auth::check()) 
+    <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('default-avatar.png') }}" 
+         alt="Profile Picture" 
+         class="w-14 h-14 rounded-full object-cover">
+@endif
+
+   
         <div>
-          <h6 class="font-medium mb-0">John Doe</h6>
+          <h6 class="font-medium mb-0">{{ Auth::user()->name }}</h6>
           <small class="text-[#6c757d]">Cashier</small>
         </div>
       </div>

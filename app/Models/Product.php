@@ -10,6 +10,7 @@ class Product extends Model {
 
     protected $fillable = [
         'barcode',
+        'product_picture',
         'name',
         'category',
         'quantity',
@@ -20,6 +21,6 @@ class Product extends Model {
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'product_id');
+        return $this->hasMany(Order::class, 'product_id');
     }
 }

@@ -1,6 +1,5 @@
 @extends('layouts.app-magazinier')
 
-
 @section('title', 'Inventory Management')
 
 @section('content')
@@ -15,7 +14,7 @@
         <table class="w-full">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="py-3 px-4 text-left">ID</th>
+                    <th class="py-3 px-4 text-left">Image</th>
                     <th class="py-3 px-4 text-left">Product Name</th>
                     <th class="py-3 px-4 text-left">Category</th>
                     <th class="py-3 px-4 text-left">Quantity</th>
@@ -27,11 +26,32 @@
             <tbody id="inventoryList">
                 @forelse($products as $product)
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-3 px-4">{{ $product->id }}</td>
+                        <!-- Product Image -->
+                        <td class="py-3 px-4">
+                            @if($product->product_picture)
+                                <img src="{{ asset('storage/' . $product->product_picture) }}" 
+                                     alt="Product Image" 
+                                     class="w-16 h-16 object-cover rounded-lg">
+                            @else
+                                <img src="{{ asset('default-product.png') }}" 
+                                     alt="Default Image" 
+                                     class="w-16 h-16 object-cover rounded-lg">
+                            @endif
+                        </td>
+                        
+                        <!-- Product Name -->
                         <td class="py-3 px-4">{{ $product->name }}</td>
+
+                        <!-- Category -->
                         <td class="py-3 px-4">{{ $product->category }}</td>
+
+                        <!-- Quantity -->
                         <td class="py-3 px-4">{{ $product->quantity }}</td>
+
+                        <!-- Price -->
                         <td class="py-3 px-4">{{ number_format($product->price, 2) }}</td>
+
+                        <!-- Status -->
                         <td class="py-3 px-4">
                             @if($product->quantity == 0)
                                 <span class="px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded">Out of Stock</span>
@@ -41,20 +61,25 @@
                                 <span class="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded">Available</span>
                             @endif
                         </td>
+
+                        <!-- Actions (Aligned) -->
                         <td class="py-3 px-4">
-    <a href="{{ route('products.edit', $product->id) }}" class="text-blue-500 hover:text-blue-700">
-        <i class="fas fa-edit"></i> Edit
-    </a>
-</td>
-<td class="py-3 px-4">
-    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline-block">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="text-red-500 hover:text-red-700">
-            <i class="fas fa-trash-alt"></i> Delete
-        </button>
-    </form>
-</td>
+                            <div class="flex items-center space-x-4">
+                                <!-- Edit Button -->
+                                <a href="{{ route('products.edit', $product->id) }}" class="text-blue-500 hover:text-blue-700 flex items-center">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </a>
+
+                                <!-- Delete Button -->
+                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-500 hover:text-red-700 flex items-center">
+                                        <i class="fas fa-trash-alt mr-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>

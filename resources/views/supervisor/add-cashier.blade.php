@@ -31,6 +31,7 @@
     @endif
 
   <h2 class="text-2xl font-semibold text-[#2b2d42] mb-6">Add New Cashier</h2>
+  
   <form action="{{ route('store.cashier') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
     @csrf
 
@@ -46,6 +47,7 @@
             class="opacity-0 absolute w-full h-full cursor-pointer" 
             accept="image/*"
           >
+          
           <img id="previewImageCashier" src="" alt="" class="w-full h-full object-cover hidden rounded-full">
           <i id="uploadPlaceholderCashier" class="fas fa-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-400"></i>
         </div>
