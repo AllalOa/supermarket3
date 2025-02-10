@@ -147,9 +147,7 @@ Route::get('/newsale', function () {
 })->name('newsale');
 
 
-Route::get('/MakeAnOrder', function () {
-    return view('cashier.demand2'); 
-})->name('MakeAnOrder');
+
     // Other cashier routes...
     Route::get('/newsale', [TransactionController::class, 'showSalePage'])->middleware('auth')->name('cashier.sale');
     Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
@@ -169,6 +167,7 @@ Route::get('/MakeAnOrder', function () {
     Route::get('/cashier/orders', [OrderController::class, 'cashierOrders'])->name('cashier.orders');
 
     Route::get('/get-product-price/{productId}', [ProductController::class, 'getProductPrice']);
+    Route::get('/MakeAnOrder', [ProductController::class, 'showDemandForm'])->name('MakeAnOrder');
 
 });
 
