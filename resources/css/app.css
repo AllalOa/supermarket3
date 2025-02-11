@@ -1,3 +1,7 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import "@fontsource/poppins"; /* Imports all weights */
+@import "select2/dist/css/select2.min.css";
+/* Tailwind's base, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

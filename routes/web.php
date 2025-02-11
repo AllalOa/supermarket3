@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AnalyticsController;
 use App\Models\Product;
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
 
@@ -93,6 +94,11 @@ Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'ge
     })->name('settings');
     // Other supervisor routes...
     Route::get('/supervisor/inventory', [InventoryController::class, 'index'])->name('supervisor.inventory');
+
+  
+    Route::get('/supervisor/analytics', [AnalyticsController::class, 'analytics'])->name('supervisor.analytics');
+
+
 });
 
 // Apply role middleware to magazinier routes

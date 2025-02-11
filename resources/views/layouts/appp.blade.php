@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Supermarket Pro')</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-200 font-[Poppins] min-h-screen flex">
 
@@ -54,9 +51,9 @@
     </li>
 
     <li>
-        <a href="{{ route('analytics') }}" 
+        <a href="{{ route('supervisor.analytics') }}" 
            class="flex items-center gap-3 px-4 py-3 rounded-lg 
-           {{ request()->routeIs('analytics') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+           {{ request()->routeIs('supervisor.analytics') ? 'bg-[#4361ee] text-white shadow-md pointer-events-none' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
             <i class="fas fa-chart-line w-5 text-center"></i> Analytics
         </a>
     </li>
@@ -84,8 +81,8 @@
       <div class="flex items-center gap-3">
         <img src="https://via.placeholder.com/40" class="rounded-full w-10 h-10" alt="User">
         <div>
-          <h6 class="font-medium mb-0">John Doe</h6>
-          <small class="text-[#6c757d]">Cashier</small>
+          <h6 class="font-medium mb-0">{{ Auth::user()->name }}</h6>
+          <small class="text-[#6c757d]">Supervisor</small>
         </div>
       </div>
     </div>
