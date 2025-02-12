@@ -79,11 +79,51 @@
         <p class="text-[#6c757d]">Last login: Today at 09:42 AM</p>
       </div>
       <div class="flex items-center gap-3">
-        <img src="https://via.placeholder.com/40" class="rounded-full w-10 h-10" alt="User">
-        <div>
-          <h6 class="font-medium mb-0">{{ Auth::user()->name }}</h6>
-          <small class="text-[#6c757d]">Supervisor</small>
-        </div>
+        <div class="hidden sm:flex sm:items-center sm:ms-6">
+          <x-dropdown align="right" width="48">
+              <x-slot name="trigger">
+                  <button
+                      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                      <div></div>
+
+                      <div class="ms-1">
+                          @if (Auth::check())
+                              <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('default-avatar.png') }}"
+                                  alt="Profile Picture" class="w-14 h-14 rounded-full object-cover">
+                          @endif
+                      </div>
+                  </button>
+              </x-slot>
+
+              <x-slot name="content">
+                  <x-dropdown-link >
+
+                      <h6 class="font-medium mb-0">Hi,{{ Auth::user()->name }}</h6>
+
+                  </x-dropdown-link>
+                  <hr>
+                  <x-dropdown-link>
+                      {{ __('Profile') }}
+                  </x-dropdown-link>
+
+
+                  <!-- Authentication -->
+                  <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+
+                      <x-dropdown-link :href="route('logout')"
+                          onclick="event.preventDefault();
+                        this.closest('form').submit();">
+                          {{ __('Log Out') }}
+                      </x-dropdown-link>
+                  </form>
+      </div>
+
+
+
+
+          </x-slot>
+          </x-dropdown>
       </div>
     </div>
 
