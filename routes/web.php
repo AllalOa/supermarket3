@@ -98,6 +98,9 @@ Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'ge
   
     Route::get('/supervisor/analytics', [AnalyticsController::class, 'analytics'])->name('supervisor.analytics');
 
+    Route::post('/supervisor/promote-user', [SupervisorDashboardController::class, 'promoteUser'])->name('supervisor.promoteUser');
+    Route::post('/supervisor/demote-user', [SupervisorDashboardController::class, 'demoteUser'])->name('supervisor.demoteUser');
+    Route::get('/supervisor/promoted-users', [SupervisorDashboardController::class, 'getPromotedUsers'])->name('supervisor.promotedUserss');
 
 });
 
