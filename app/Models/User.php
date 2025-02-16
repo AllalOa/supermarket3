@@ -54,4 +54,8 @@ class User extends Authenticatable
     return $this->hasMany(Promotion::class);
 }
 
+public function suspensions()
+{
+    return $this->hasMany(Suspension::class);
+}
 }
