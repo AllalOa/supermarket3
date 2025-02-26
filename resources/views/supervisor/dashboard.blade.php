@@ -3,80 +3,124 @@
 @section('title', 'Supervisor Dashboard')
 
 @section('content')
-
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        {{-- 📌 Total Cashiers --}}
-        <div class="bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md cursor-pointer"
-            onclick="openModal('cashiers')">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Total Cashiers</p>
-                    <p class="text-3xl font-bold text-[#2b2d42]">{{ $totalCashiers }}</p>
-                </div>
-                <i class="fas fa-user-tie text-2xl text-[#4361ee]"></i>
+ <!-- Page Header -->
+ <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+      <p class="text-gray-600 mt-1">Welcome back, Alex! Here's what's happening today.</p>
+    </div>
+    <div class="mt-4 md:mt-0 space-y-2 md:space-y-0 md:flex md:space-x-2">
+      <button class="w-full md:w-auto bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+        <i class="fas fa-plus mr-2"></i> Add Cashier
+      </button>
+      <button class="w-full md:w-auto border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition duration-300 flex items-center justify-center">
+        <i class="fas fa-plus mr-2"></i> Add Magazinier
+      </button>
+    </div>
+  </div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    {{-- 📌 Total Cashiers --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer group"
+        onclick="openModal('cashiers')">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Total Cashiers</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $totalCashiers }}</h3>
+                <span class="text-xs text-green-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> 12.5%
+                </span>
             </div>
-        </div>
-
-        {{-- 📌 Total Magaziniers --}}
-        <div class="bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md cursor-pointer"
-            onclick="openModal('magaziniers')">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Total Magaziniers</p>
-                    <p class="text-3xl font-bold text-[#2b2d42]">{{ $totalMagaziniers }}</p>
-                </div>
-                <i class="fas fa-user-cog text-2xl text-[#4361ee]"></i>
-            </div>
-        </div>
-
-        {{-- 📌 Total Products (Redirects to Inventory) --}}
-        <a href="{{ route('supervisor.inventory') }}"
-            class="bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Total Products</p>
-                    <p class="text-3xl font-bold text-[#2b2d42]">{{ $totalProducts }}</p>
-                </div>
-                <i class="fas fa-boxes text-2xl text-[#4361ee]"></i>
-            </div>
-        </a>
-
-        {{-- 📌 Low Stock Items --}}
-        <div class="bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md cursor-pointer"
-            onclick="openLowStockModal()">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Low Stock Items</p>
-                    <p class="text-3xl font-bold text-[#e63946]">{{ $lowStockItems }}</p>
-                </div>
-                <i class="fas fa-exclamation-triangle text-2xl text-[#ff4d4d]"></i>
-            </div>
-        </div>
-
-        {{-- 📌 Promoted Users --}}
-        <div class=" bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md cursor-pointer"
-            onclick="openPromotedUsersModal()">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Promoted Users</p>
-                    <p class="text-3xl font-bold text-[#1d3557]">{{ $totalPromotedUsers }}</p>
-                </div>
-                <i class="fas fa-user-check text-2xl text-[#ff9f1c]"></i>
-            </div>
-        </div>
-        {{-- 🔹 Suspended Users Section --}}
-        {{-- 🔹 Suspended Users Card --}}
-        <div class="bg-white p-6 rounded-xl shadow-sm transition-transform transform hover:scale-105 hover:shadow-md cursor-pointer"
-            onclick="openSuspendedUsersModal()">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-[#6c757d]">Suspended Users</p>
-                    <p class="text-3xl font-bold text-[#2b2d42]">{{ $totalSuspendedUsers }}</p>
-                </div>
-                <i class="fas fa-user-slash text-2xl text-[#4361ee]"></i>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+                <i class="fas fa-user-tie text-xl text-blue-600"></i>
             </div>
         </div>
     </div>
+
+    {{-- 📌 Total Magaziniers --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer group"
+        onclick="openModal('magaziniers')">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Total Magaziniers</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $totalMagaziniers }}</h3>
+                <span class="text-xs text-blue-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-right mr-1"></i> 5.2%
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
+                <i class="fas fa-user-cog text-xl text-purple-600"></i>
+            </div>
+        </div>
+    </div>
+
+    {{-- 📌 Total Products --}}
+    <a href="{{ route('supervisor.inventory') }}" 
+       class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md group">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Total Products</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $totalProducts }}</h3>
+                <span class="text-xs text-green-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> 24.8%
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center">
+                <i class="fas fa-boxes text-xl text-green-600"></i>
+            </div>
+        </div>
+    </a>
+
+    {{-- 📌 Low Stock Items --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer group"
+        onclick="openLowStockModal()">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Low Stock Items</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $lowStockItems }}</h3>
+                <span class="text-xs text-red-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-down mr-1"></i> 8.3%
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center">
+                <i class="fas fa-exclamation-triangle text-xl text-red-600"></i>
+            </div>
+        </div>
+    </div>
+
+    {{-- 📌 Promoted Users --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer group"
+        onclick="openPromotedUsersModal()">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Promoted Users</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $totalPromotedUsers }}</h3>
+                <span class="text-xs text-amber-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-up mr-1"></i> 15.7%
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center">
+                <i class="fas fa-user-check text-xl text-amber-600"></i>
+            </div>
+        </div>
+    </div>
+
+    {{-- 📌 Suspended Users --}}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer group"
+        onclick="openSuspendedUsersModal()">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Suspended Users</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ $totalSuspendedUsers }}</h3>
+                <span class="text-xs text-indigo-500 flex items-center mt-1">
+                    <i class="fas fa-arrow-right mr-1"></i> 2.1%
+                </span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-50 flex items-center justify-center">
+                <i class="fas fa-user-slash text-xl text-indigo-600"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

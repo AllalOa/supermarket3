@@ -228,4 +228,5 @@ public function reinstateUser(Request $request)
 
     return response()->json(['success' => false, 'message' => 'Suspension record not found.']);
 }
+
 }

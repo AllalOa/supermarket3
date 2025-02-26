@@ -105,6 +105,8 @@ Route::middleware('rolemanager:supervisor')->group(function () {
     Route::get('/supervisor/suspended-users', [SupervisorDashboardController::class, 'suspendedUsers'])->name('supervisor.suspendedUsers');
     Route::post('/supervisor/suspend', [SupervisorDashboardController::class, 'suspendUser'])->name('supervisor.suspendUser');
     Route::post('/supervisor/reinstate-user', [SupervisorDashboardController::class, 'reinstateUser'])->name('supervisor.reinstateUser');
+   
+
 });
 
 // Apply role middleware to magazinier routes
