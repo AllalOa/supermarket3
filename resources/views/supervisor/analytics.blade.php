@@ -32,112 +32,68 @@
         </div>
 
         <!-- Quick Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Total Visitors Card -->
-            <div
-                class="card bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:scale-[1.02] hover:shadow-md group relative">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
-                        <i class="fas fa-eye text-indigo-600 text-xl"></i>
-                    </div>
-                    <div class="rounded-lg bg-indigo-50 px-2 py-1">
-                        <span class="text-xs font-medium text-indigo-600 flex items-center">
-                            <i class="fas fa-arrow-up mr-1"></i> 16.8%
-                        </span>
-                    </div>
-                </div>
-                <h3 class="text-sm font-medium text-gray-500">Total Visitors</h3>
-                <div class="flex items-end mt-1">
-                    <h2 class="text-3xl font-bold">24,563</h2>
-                    <span class="text-xs text-gray-500 ml-2 mb-1">users</span>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <div class="w-full bg-gray-100 rounded-full h-1.5">
-                        <div class="bg-indigo-600 h-1.5 rounded-full transition-all duration-1000" style="width: 75%"
-                            data-percent="75"></div>
-                    </div>
-                    <span class="text-xs text-indigo-600 ml-2 scale-percent">75%</span>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-            <!-- Total Sales Card -->
-            <div
-                class="card bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:scale-[1.02] hover:shadow-md group relative">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+
+
+
+
+
+
+            <div class="card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Total Sells (24h)</p>
+                        <h2 class="text-3xl font-bold text-gray-900">
+                            {{ number_format($transactions->sum('total_sales'), 2) }} DA</h2>
+                        <div class="flex items-center mt-2 text-sm">
+                            <span class="text-green-500 font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i>168%
+                            </span>
+                            <span class="text-gray-500 ml-2">vs last period</span>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-lg">
                         <i class="fas fa-chart-line text-green-600 text-xl"></i>
                     </div>
-                    <div class="rounded-lg bg-green-50 px-2 py-1">
-                        <span class="text-xs font-medium text-green-600 flex items-center">
-                            <i class="fas fa-arrow-up mr-1"></i> 22.3%
-                        </span>
-                    </div>
-                </div>
-                <h3 class="text-sm font-medium text-gray-500">Total Sales</h3>
-                <div class="flex items-end mt-1">
-                    <h2 class="text-3xl font-bold">{{ number_format($transactions->sum('total_sales'), 2) }} DA</h2>
-                    <span class="text-xs text-gray-500 ml-2 mb-1">this month</span>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <div class="w-full bg-gray-100 rounded-full h-1.5">
-                        <div class="bg-green-600 h-1.5 rounded-full transition-all duration-1000" style="width: 82%"
-                            data-percent="82"></div>
-                    </div>
-                    <span class="text-xs text-green-600 ml-2 scale-percent">82%</span>
                 </div>
             </div>
 
-            <!-- New Customers Card -->
-            <div
-                class="card bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:scale-[1.02] hover:shadow-md group relative">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                        <i class="fas fa-users text-amber-600 text-xl"></i>
+            <div class="card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Total Orders (Today)</p>
+                        <h2 class="text-3xl font-bold text-gray-900">19</h2>
+                        <div class="flex items-center mt-2 text-sm">
+                            <span class="text-green-500 font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i>22%
+                            </span>
+                            <span class="text-gray-500 ml-2">vs last period</span>
+                        </div>
                     </div>
-                    <div class="rounded-lg bg-amber-50 px-2 py-1">
-                        <span class="text-xs font-medium text-amber-600 flex items-center">
-                            <i class="fas fa-arrow-up mr-1"></i> 12.7%
-                        </span>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <i class="fas fa-shopping-cart text-xl text-green-500"></i>
                     </div>
-                </div>
-                <h3 class="text-sm font-medium text-gray-500">New Customers</h3>
-                <div class="flex items-end mt-1">
-                    <h2 class="text-3xl font-bold">3,452</h2>
-                    <span class="text-xs text-gray-500 ml-2 mb-1">this month</span>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <div class="w-full bg-gray-100 rounded-full h-1.5">
-                        <div class="bg-amber-600 h-1.5 rounded-full transition-all duration-1000" style="width: 65%"
-                            data-percent="65"></div>
-                    </div>
-                    <span class="text-xs text-amber-600 ml-2 scale-percent">65%</span>
                 </div>
             </div>
 
-            <!-- Conversion Rate Card -->
-            <div
-                class="card bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:scale-[1.02] hover:shadow-md group relative">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-shopping-cart text-blue-600 text-xl"></i>
+            <div class="card bg-white rounded-lg shadow-sm p-6">
+
+
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium mb-1">Avg Revenue (This month)</p>
+                        <h2 class="text-3xl font-bold text-gray-900">45.200.10 DA</h2>
+                        <div class="flex items-center mt-2 text-sm">
+                            <span class="text-red-500 font-medium flex items-center">
+                                <i class=""></i>
+                            </span>
+                            <span class="text-gray-500 ml-2"></span>
+                        </div>
                     </div>
-                    <div class="rounded-lg bg-red-50 px-2 py-1">
-                        <span class="text-xs font-medium text-red-600 flex items-center">
-                            <i class="fas fa-arrow-down mr-1"></i> 3.4%
-                        </span>
+                    <div class="bg-red-50 p-3 rounded-lg">
+                        <i class="fas fa-dollar-sign text-xl text-red-500"></i>
                     </div>
-                </div>
-                <h3 class="text-sm font-medium text-gray-500">Conversion Rate</h3>
-                <div class="flex items-end mt-1">
-                    <h2 class="text-3xl font-bold">5.63%</h2>
-                    <span class="text-xs text-gray-500 ml-2 mb-1">avg.</span>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <div class="w-full bg-gray-100 rounded-full h-1.5">
-                        <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-1000" style="width: 45%"
-                            data-percent="45"></div>
-                    </div>
-                    <span class="text-xs text-blue-600 ml-2 scale-percent">45%</span>
                 </div>
             </div>
         </div>
@@ -253,35 +209,146 @@
             </div>
 
             <!-- Right Half - Weekly Performance -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-              <!-- Week Selector -->
-              <div class="mb-8 flex gap-4 items-center">
-                <select 
-                    id="weekSelector" 
-                    class="border rounded-lg px-4 py-2"
-                    onchange="updateChart()"
-                >
-                    @foreach($weekOptions as $week => $dates)
-                        <option value="{{ $week }}" {{ $selectedWeek == $week ? 'selected' : '' }}>
-                            Week {{ $week }} ({{ $dates['start'] }} - {{ $dates['end'] }})
-                        </option>
-                    @endforeach
-                </select>
-                
-                <input 
-                    type="month" 
-                    value="{{ $year }}-{{ str_pad($month, 2, '0', STR_PAD_LEFT) }}" 
-                    class="border rounded-lg px-4 py-2"
-                    onchange="updateMonth(this.value)"
-                >
-              </div>
+          
+            <div x-data="orderModal()">  <!-- Move x-data here -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-gray-900">Recent Activities</h3>
+                            <button class="text-blue-500 hover:text-blue-700 text-sm font-medium transition duration-300">
+                                View All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="divide-y divide-gray-100">
+                            @foreach ($activities as $activity)
+                                <div class="py-4 first:pt-0 last:pb-0">
+                                    <div class="flex items-center space-x-4">
+                                        <!-- Profile Picture -->
+                                        <img src="{{ $activity->user && $activity->user->profile_picture ? asset('storage/' . $activity->user->profile_picture) : asset('default-avatar.png') }}"
+                                            alt="User"
+                                            class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-md">
             
-              <!-- Chart Container -->
-              <div class="chart-container" style="height: 500px">
-                  <canvas id="cashierdailyChart"></canvas>
-              </div>
+                                        <!-- Activity Details -->
+                                        <div class="flex-1">
+                                            <p class="text-gray-800 text-sm font-medium">
+                                                {{ $activity->user->name ?? 'System' }}
+                                                <span class="font-normal text-gray-600"> {{ $activity->action }} </span>
+                                            </p>
+                                            <div class="flex items-center mt-1 text-gray-500 text-xs">
+                                                <p>{{ $activity->created_at->diffForHumans() }}</p>
+            
+                                                <!-- Show "View Details" only if the activity type is "order" -->
+                                                @if ($activity->model_type === 'App\Models\Order')
+                                                    <span class="inline-block w-1 h-1 rounded-full bg-gray-300 mx-2"></span>
+                                                    <button @click="openModal('{{ $activity->model_id }}')" 
+                                                        class="text-blue-500 font-medium hover:underline cursor-pointer">
+                                                        View Details
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Modal (Hidden by Default) -->
+               <!-- Modal -->
+<div x-show="showModal" 
+class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center"
+x-transition.opacity>
+
+<div class="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto" x-show="showModal" x-transition>
+    <div class="flex justify-between items-center">
+        <h3 class="text-lg font-bold text-gray-900">Order Details</h3>
+        <button @click="closeModal()" class="text-gray-500 hover:text-gray-800">&times;</button>
+    </div>
+
+    <div class="mt-4 space-y-2">
+        <p class="text-sm text-gray-700">
+            Order ID: <span x-text="order?.id"></span>
+        </p>
+        <p class="text-sm text-gray-700">
+            Status: <span x-text="order?.status" class="capitalize"></span>
+        </p>
+        <p class="text-sm text-gray-700">
+            Total Price: $<span x-text="total_price"></span>
+        </p>
+        <p class="text-sm text-gray-700">
+            Cashier: <span x-text="order?.cashier?.name"></span>
+        </p>
+
+        <div class="mt-4 border-t pt-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-2">Items:</h4>
+            <template x-for="detail in order_details" :key="detail.id">
+                <div class="text-sm text-gray-700 py-1 border-b last:border-b-0">
+                    <span x-text="detail.product.name"></span> ×
+                    <span x-text="detail.quantity"></span>
+                    ($<span x-text="(detail.quantity * detail.product.price).toFixed(2)"></span>)
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+        <button @click="closeModal()" class="bg-red-500 text-white px-4 py-2 rounded">Close</button>
+    </div>
+</div>
+</div>
             </div>
-   
+            
+            
+
+            <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+           <script>
+function orderModal() {
+    return {
+        showModal: false,
+        order: null,
+        order_details: [],
+        total_price: 0,
+
+        async openModal(orderId) {
+            try {
+                let response = await fetch(`/api/orders/${orderId}`);
+                if (!response.ok) throw new Error("Failed to fetch order");
+                
+                const data = await response.json();
+                this.order = data.order;
+                this.order_details = data.order_details;
+                this.total_price = data.total_price.toFixed(2);
+                this.showModal = true;
+            } catch (error) {
+                console.error("Error fetching order:", error);
+                alert('Error loading order details');
+            }
+        },
+
+        closeModal() {
+            this.showModal = false;
+            this.order = null;
+            this.order_details = [];
+            this.total_price = 0;
+        }
+    };
+}
+           </script>
+            
+
+
+           
+            
+            
+            
+         
+            
+            
+
         </div>
 
 
@@ -712,102 +779,102 @@
 
 
 
-     // Daily Trend Chart
-const dailyCtx = document.getElementById('dailyTrendChart').getContext('2d');
-new Chart(dailyCtx, {
-    type: 'line',
-    data: {
-        labels: @json($dailyOrders->pluck('order_date')),
-        datasets: [{
-            label: 'Total Daily Orders',
-            data: @json($dailyOrders->pluck('daily_total')),
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            tension: 0.3,
-            fill: true,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            borderWidth: 2
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                    title: ([item]) => item.label,
-                    label: (context) => {
-                        return ` Total: ${new Intl.NumberFormat('en-DZ', {
+            // Daily Trend Chart
+            const dailyCtx = document.getElementById('dailyTrendChart').getContext('2d');
+            new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: @json($dailyOrders->pluck('order_date')),
+                    datasets: [{
+                        label: 'Total Daily Orders',
+                        data: @json($dailyOrders->pluck('daily_total')),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: ([item]) => item.label,
+                                label: (context) => {
+                                    return ` Total: ${new Intl.NumberFormat('en-DZ', {
                             style: 'currency',
                             currency: 'DZD'
                         }).format(context.parsed.y)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f3f4f6'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Total Order Amount'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('en-DZ', {
+                                        style: 'currency',
+                                        currency: 'DZD',
+                                        maximumFractionDigits: 0
+                                    }).format(value);
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x'
                     }
                 }
-            }
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Date'
-                }
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#f3f4f6'
-                },
-                title: {
-                    display: true,
-                    text: 'Total Order Amount'
-                },
-                ticks: {
-                    callback: function(value) {
-                        return new Intl.NumberFormat('en-DZ', {
-                            style: 'currency',
-                            currency: 'DZD',
-                            maximumFractionDigits: 0
-                        }).format(value);
-                    }
-                }
-            }
-        },
-        interaction: {
-            mode: 'nearest',
-            axis: 'x'
-        }
-    }
-});
+            });
 
-         
+
 
             let chartInstance = null;
-            
+
             function initChart() {
                 const ctx = document.getElementById('cashierdailyChart').getContext('2d');
-                
+
                 // Generate colors
                 const colors = [
-                    '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
+                    '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
                     '#EC4899', '#14B8A6', '#84CC16', '#F97316', '#64748B'
                 ];
-            
+
                 // Prepare datasets
                 const datasets = [];
-                @foreach($dailyOrders as $cashier => $data)
+                @foreach ($dailyOrders as $cashier => $data)
                     datasets.push({
                         label: '{{ $cashier }}',
                         data: [
-                            @foreach($dates as $date)
+                            @foreach ($dates as $date)
                                 @php
                                     $dailyTotal = $data->firstWhere('order_date', $date)->daily_total ?? 0;
                                 @endphp
@@ -821,10 +888,10 @@ new Chart(dailyCtx, {
                         borderWidth: 2
                     });
                 @endforeach
-            
+
                 // Create or update chart
-                if(chartInstance) chartInstance.destroy();
-                
+                if (chartInstance) chartInstance.destroy();
+
                 chartInstance = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -836,12 +903,20 @@ new Chart(dailyCtx, {
                         maintainAspectRatio: false,
                         scales: {
                             x: {
-                                grid: { display: false },
-                                title: { display: true, text: 'Date' }
+                                grid: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
                             },
                             y: {
                                 beginAtZero: true,
-                                title: { display: true, text: 'Total Amount (DA)' },
+                                title: {
+                                    display: true,
+                                    text: 'Total Amount (DA)'
+                                },
                                 ticks: {
                                     callback: function(value) {
                                         return new Intl.NumberFormat('en-DZ', {
@@ -869,18 +944,18 @@ new Chart(dailyCtx, {
                     }
                 });
             }
-            
+
             function updateChart() {
                 const week = document.getElementById('weekSelector').value;
                 const [year, month] = document.querySelector('input[type="month"]').value.split('-');
-                
+
                 window.location.search = new URLSearchParams({
                     week: week,
                     year: year,
                     month: month
                 }).toString();
             }
-            
+
             function updateMonth(value) {
                 const [year, month] = value.split('-');
                 window.location.search = new URLSearchParams({
@@ -889,13 +964,8 @@ new Chart(dailyCtx, {
                     month: month
                 }).toString();
             }
-            
+
             // Initialize chart
             document.addEventListener('DOMContentLoaded', initChart);
-            
-
-
-
-            
         </script>
     @endsection

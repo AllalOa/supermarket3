@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\ActivityHelper;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -45,9 +45,9 @@ class OrderController extends Controller
                 'status' => 'pending',
             ]);
         }
-
+        ActivityHelper::log("Created a new order", $order);
         session()->flash('success', 'Order passed succcesefuly !');
-
+ 
         // Redirect to the cashier dashboard with the success message
         return redirect()->route('cashier.dashboard');
     }

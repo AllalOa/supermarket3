@@ -7,13 +7,19 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Bill;
 use App\Models\Product;
-
+use App\Models\Order;
+    use App\Models\Activity;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
+
+
+
+
+
     public function analytics(Request $request)
     {
         $startDate = $request->query('start_date', now()->startOfMonth()->toDateString()); // Default: Beginning of this month
@@ -118,6 +124,41 @@ class AnalyticsController extends Controller
                     
                     $date->addWeek();
                 }
-        return view('supervisor.analytics', compact('transactions', 'cashierBills', 'startDate', 'endDate', 'productSales', 'orderStats', 'dailyOrders', 'dates','weekOptions', 'selectedWeek', 'year', 'month'));
+
+
+
+
+    $activities = Activity::latest()->limit(5)->get(); // Fetch last 5 logs
+
+        return view('supervisor.analytics', compact('transactions', 'cashierBills', 'startDate', 'endDate', 'productSales', 'orderStats', 'dailyOrders', 'dates','weekOptions', 'selectedWeek', 'year', 'month','activities'));
     }
+
+    public function show($orderId)
+    {
+        try {
+            // Explicitly find the order with relationships
+            $order = Order::with(['cashier', 'orderDetails.product'])
+                        ->findOrFail($orderId);
+
+            // Calculate total price safely
+            $totalPrice = $order->orderDetails->sum(function($detail) {
+                return $detail->quantity * ($detail->product->price ?? 0);
+            });
+
+            return response()->json([
+                'order' => $order,
+                'total_price' => $totalPrice,
+                'order_details' => $order->orderDetails
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error("API Error: " . $e->getMessage());
+            return response()->json([
+                'error' => 'Order not found or invalid request',
+                'message' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+
 }

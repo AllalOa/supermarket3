@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AnalyticsController;
 use App\Models\Product;
+use App\Models\Order;
 
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
 
@@ -105,7 +106,10 @@ Route::middleware('rolemanager:supervisor')->group(function () {
     Route::get('/supervisor/suspended-users', [SupervisorDashboardController::class, 'suspendedUsers'])->name('supervisor.suspendedUsers');
     Route::post('/supervisor/suspend', [SupervisorDashboardController::class, 'suspendUser'])->name('supervisor.suspendUser');
     Route::post('/supervisor/reinstate-user', [SupervisorDashboardController::class, 'reinstateUser'])->name('supervisor.reinstateUser');
-   
+    Route::get('/orders/{id}', function ($id) {
+        return Order::with('user')->findOrFail($id);
+    });
+    Route::get('/orders/{order}', [AnalyticsController::class, 'show']);
 
 });
 

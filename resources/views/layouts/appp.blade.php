@@ -10,7 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Tailwind CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  
+  <!-- Include Alpine.js if not already included -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
 
@@ -192,12 +193,7 @@
           </div>
           
           <!-- Messages -->
-          <div class="relative">
-            <button class="text-gray-500 hover:text-blue-600 transition duration-300 relative">
-              <i class="fas fa-envelope text-lg"></i>
-              <span class="notification-badge flex h-5 w-5 items-center justify-center bg-green-500 text-white text-xs rounded-full">5</span>
-            </button>
-          </div>
+       
           
           <!-- User Profile -->
           <div class="relative">

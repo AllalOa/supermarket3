@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Helpers\ActivityHelper;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,15 +31,29 @@ class AuthenticatedSessionController extends Controller
 
         
       $authuserrole = Auth::user()->role;
+
+      $user = Auth::user();
+      $role = $user->role;
+  
+      // Define different log messages based on role
+      $logMessage = match ($role) {
+         
+          1 => "the Magazinier just logged in",
+          2 => "the Cashier just opened the store",
+         
+      };
+      ActivityHelper::log($logMessage);
       
       if($authuserrole == 0) {
           return redirect()->intended(route('supervisor.dashboard', absolute: false));
         
       } else {
+        
           return redirect()->intended(route('magazinier.dashboard', absolute: false));
         
       }
 
+  
         return redirect()->intended(route('cashier.dashboard', absolute: false));
     }
 
@@ -47,6 +62,27 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+
+        $user = Auth::user();
+
+        if ($user) {
+            $role = $user->role;
+    
+            // Define different logout messages based on role
+            $logMessage = match ($role) {
+                
+                1 => "the Magazinier just logged out",
+                2 => "the Cashier just closed the store",
+           
+            };
+    
+            // Log the activity
+            ActivityHelper::log($logMessage);
+        }
+
+
+
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
