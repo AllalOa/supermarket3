@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
   
       // Define different log messages based on role
       $logMessage = match ($role) {
-         
+        0=> "the Admin logged in",
           1 => "the Magazinier just logged in",
           2 => "the Cashier just opened the store",
          

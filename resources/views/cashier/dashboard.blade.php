@@ -30,6 +30,9 @@
           Start New Sale
         </button>
       </a>
+      <button id="newSaleBtn" class="w-full mb-6 bg-[#4361ee] text-white py-3 rounded-lg font-semibold hover:bg-[#3f37c9] transition">
+          Start New Sale
+        </button>
 
       <!-- Recent Transactions -->
       <div id="recentTransactions" class="bg-white rounded-xl shadow-sm p-6">
