@@ -110,6 +110,8 @@ Route::middleware('rolemanager:supervisor')->group(function () {
         return Order::with('user')->findOrFail($id);
     });
     Route::get('/orders/{order}', [AnalyticsController::class, 'show']);
+    Route::get('/order-details/{orderId}', [AnalyticsController::class, 'getOrderDetails']);
+    Route::get('/all-activities', [AnalyticsController::class, 'getAllActivities']);
 
 });
 

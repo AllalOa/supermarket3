@@ -11,13 +11,23 @@ class Order extends Model
 
     protected $fillable = ['cashier_id', 'status'];
 
-    public function details()
-    {
-        return $this->hasMany(OrderDetail::class, 'order_id');
-    }
-
+    // Define the correct relationship
     public function cashier()
     {
         return $this->belongsTo(User::class, 'cashier_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'cashier_id');
+    }
+    public function orderDetails()
+{
+    return $this->hasMany(OrderDetail::class, 'order_id');
+}
+public function details()
+{
+    return $this->hasMany(OrderDetail::class);
+}
+
 }

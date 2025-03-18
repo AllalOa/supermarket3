@@ -13,6 +13,7 @@
   <!-- Include Alpine.js if not already included -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
 
     .card {

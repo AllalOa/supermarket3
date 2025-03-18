@@ -10,12 +10,12 @@
       <p class="text-gray-600 mt-1">Welcome back, Alex! Here's what's happening today.</p>
     </div>
     <div class="mt-4 md:mt-0 space-y-2 md:space-y-0 md:flex md:space-x-2">
-      <button class="w-full md:w-auto bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
-        <i class="fas fa-plus mr-2"></i> Add Cashier
-      </button>
-      <button class="w-full md:w-auto border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition duration-300 flex items-center justify-center">
+    <a href="{{route('add.cashier')}}">  <button class="w-full md:w-auto bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+        <i class="fas fa-plus mr-2"></i>  Add Cashier
+      </button></a>
+ <a href="{{route('add.magazinier')}}">     <button class="w-full md:w-auto border border-gray-300 bg-white text-gray-700 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition duration-300 flex items-center justify-center">
         <i class="fas fa-plus mr-2"></i> Add Magazinier
-      </button>
+      </button></a>
     </div>
   </div>
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

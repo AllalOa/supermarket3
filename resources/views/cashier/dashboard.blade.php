@@ -30,6 +30,7 @@
           Start New Sale
         </button>
       </a>
+   
 
       <!-- Recent Transactions -->
       <div id="recentTransactions" class="bg-white rounded-xl shadow-sm p-6">
