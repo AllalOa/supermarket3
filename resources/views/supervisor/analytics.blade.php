@@ -16,28 +16,9 @@
         <!-- Page Header -->
 
 
-  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-  <script>
-
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('7920bc1f6b143eecdd33', {
-      cluster: 'eu'
-    });
-
-    var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
-      alert(JSON.stringify(data));
-    });
-  </script>
-
-
-  <h1>Pusher Test</h1>
-  <p>
-    Try publishing an event to channel <code>my-channel</code>
-    with event name <code>my-event</code>.
-  </p>
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+     
+     
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
@@ -305,8 +286,8 @@
                                             '/default-avatar.png'"
                                             alt="User"
                                             class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 shadow-md">
-                                            
-                                        
+
+
                                         <div>
                                             <p class="text-gray-800 text-sm font-medium">
                                                 <span x-text="activity.user?.name || 'System'"></span>

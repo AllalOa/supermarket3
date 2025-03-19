@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $listen = [
+        \App\Events\OrderStatusUpdated::class => [
+            \App\Listeners\StoreOrderStatusNotification::class,
+        ],
+    ];
     /**
      * Register any application services.
      */
