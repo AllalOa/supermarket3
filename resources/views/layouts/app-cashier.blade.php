@@ -311,7 +311,9 @@
             }
         });
 
-    function playNotificationSound() {
+ 
+ 
+        function playNotificationSound() {
         const sound = document.getElementById('notification-sound');
         sound.currentTime = 0;
         sound.play().catch(console.warn);

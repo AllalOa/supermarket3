@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Notification;
 use App\Events\NewOrderNotification;
 use App\Events\OrderStatusUpdated;
-
+use App\Events\LowStockAlert;
+use App\Events\ZeroStockAlert;
 class OrderController extends Controller
 {
     public function createOrder(Request $request)
@@ -86,7 +88,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $orderDetails = OrderDetail::where('order_id', $id)->get();
-    
+        
         // Check stock for each order detail
         foreach ($orderDetails as $detail) {
             $product = Product::findOrFail($detail->product_id);
@@ -94,37 +96,88 @@ class OrderController extends Controller
                 return redirect()->back()->with('error', 'Stock insuffisant pour : ' . $product->name);
             }
         }
-    
+        
+        $lowStockProducts = [];
+        $zeroStockProducts = [];
+        
         // Deduct stock and update order detail statuses
         foreach ($orderDetails as $detail) {
             $product = Product::findOrFail($detail->product_id);
             $product->quantity -= $detail->quantity;
             $product->save();
-    
+            
+            // Check if product is low in stock or out of stock after this order
+            if ($product->quantity == 0) {
+                $zeroStockProducts[] = $product;
+            } elseif ($product->quantity < 5) {
+                $lowStockProducts[] = $product;
+            }
+            
             $detail->status = 'approved';
             $detail->save();
         }
-    
+        
         // Update order status to approved
         $order->status = 'approved';
         $order->save();
-    
-        // Get the cashier's user ID (assuming the order has a cashier_id field)
+        
+        // Get the cashier's user ID
         $cashierId = $order->cashier_id;
-    
-        // Create the notification message
+        
+        // Create the notification message for cashier
         $notificationMessage = "Votre commande #{$order->id} a été validée.";
-    
-        // Save notification to the database
+        
+        // Save notification to the database for cashier
         $notification = \App\Models\Notification::create([
             'user_id' => $cashierId,
             'message' => $notificationMessage,
             'is_read' => false,
         ]);
-    
-        // Dispatch the event (using the OrderStatusUpdated event)
+        
+        // Dispatch the event for cashier notification
         event(new OrderStatusUpdated($order, 'approved', $notificationMessage));
-    
+        
+        // Get supervisor ID(s)
+        $supervisors = \App\Models\User::where('role', 'supervisor')->get();
+        
+        // Send notifications to supervisors about low stock products
+        if (!empty($lowStockProducts)) {
+            foreach ($supervisors as $supervisor) {
+                foreach ($lowStockProducts as $product) {
+                    $lowStockMessage = "Alerte: Le produit '{$product->name}' a un stock faible ({$product->quantity} restants).";
+                    
+                    // Save notification to database for supervisor
+                    \App\Models\Notification::create([
+                        'user_id' => $supervisor->id,
+                        'message' => $lowStockMessage,
+                        'is_read' => false,
+                    ]);
+                    
+                    // Dispatch event for supervisor notification
+                    event(new LowStockAlert($product, $lowStockMessage, $supervisor->id));
+                }
+            }
+        }
+        
+        // Send notifications to supervisors about out of stock products
+        if (!empty($zeroStockProducts)) {
+            foreach ($supervisors as $supervisor) {
+                foreach ($zeroStockProducts as $product) {
+                    $zeroStockMessage = "Alerte URGENT: Le produit '{$product->name}' est en rupture de stock!";
+                    
+                    // Save notification to database for supervisor
+                    \App\Models\Notification::create([
+                        'user_id' => $supervisor->id,
+                        'message' => $zeroStockMessage,
+                        'is_read' => false,
+                    ]);
+                    
+                    // Dispatch event for supervisor notification
+                    event(new ZeroStockAlert($product, $zeroStockMessage, $supervisor->id));
+                }
+            }
+        }
+        
         return redirect()->back()->with('success', 'Commande validée avec succès.');
     }
     
