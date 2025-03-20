@@ -112,7 +112,6 @@ Route::middleware('rolemanager:supervisor')->group(function () {
     Route::get('/orders/{order}', [AnalyticsController::class, 'show']);
     Route::get('/order-details/{orderId}', [AnalyticsController::class, 'getOrderDetails']);
     Route::get('/all-activities', [AnalyticsController::class, 'getAllActivities']);
-
 });
 
 // Apply role middleware to magazinier routes
@@ -161,9 +160,9 @@ Route::middleware('rolemanager:cashier')->group(function () {
     //cashier routes
 
 
-    Route::get('/newsale', function () {
-        return view('cashier.newsale'); // Replace 'newsale' with the actual Blade view name
-    })->name('newsale');
+    Route::get('/startnewsale', function () {
+        return view('cashier.pos'); // Replace 'newsale' with the actual Blade view name
+    })->name('new.sale');
 
 
 
