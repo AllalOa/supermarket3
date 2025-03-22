@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.app-cashier')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demande de Produits</title>
+@section('content')
+
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,9 +12,9 @@
     <!-- jQuery & Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-</head>
 
-<body class="bg-gray-100 flex justify-center p-6">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl mx-auto">
+
     <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Demande de Produits</h2>
         <form id="request-form" method="POST" action="{{ route('cashier.MakeAnOrder') }}">
@@ -74,7 +71,7 @@
         </button>
        </form>
     </div>
-
+</div>
     <!-- JavaScript -->
     <script>
         $(document).ready(function() {
@@ -164,6 +161,5 @@
             document.getElementById('products_json').value = JSON.stringify(products);
         }
     </script>
-</body>
 
-</html>
+@endsection

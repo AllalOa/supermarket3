@@ -148,7 +148,7 @@
                     <a href="{{ route('supervisor.inventory') }}"
                         class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('supervisor.inventory') ? 'active' : 'text-gray-700' }}">
                         <i class="fas fa-tasks w-5 mr-3"></i> Inventory
-                        <span class="ml-auto px-2 py-1 text-xs bg-blue-500 text-white rounded-full">10</span>
+                        <span class="ml-auto px-2 py-1 text-xs bg-blue-500 text-white rounded-full">3</span>
                     </a>
                 </li>
 

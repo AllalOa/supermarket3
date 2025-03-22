@@ -186,6 +186,13 @@ Route::middleware('rolemanager:cashier')->group(function () {
 
     Route::get('/get-product-price/{productId}', [ProductController::class, 'getProductPrice']);
     Route::get('/MakeAnOrder', [ProductController::class, 'showDemandForm'])->name('MakeAnOrder');
+    Route::get('/pos', [App\Http\Controllers\POSController::class, 'index'])->name('pos.index');
+    Route::get('/pos/products', [App\Http\Controllers\POSController::class, 'getProducts'])->name('pos.products');
+    Route::get('/pos/product/barcode', [App\Http\Controllers\POSController::class, 'getProductByBarcode'])->name('pos.product.barcode');
+    Route::post('/pos/process-sale', [App\Http\Controllers\POSController::class, 'processSale'])->name('pos.process-sale');
+
+
+
 });
 
 
