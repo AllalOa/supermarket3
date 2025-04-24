@@ -325,23 +325,23 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize Echo with Pusher
   window.Echo = new Echo({
-      broadcaster: 'pusher',
-      key: '{{ env("PUSHER_APP_KEY") }}',
-      cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
-      forceTLS: true,
-      encrypted: true,
-      authEndpoint: '/broadcasting/auth',
-      auth: {
-          headers: {
-              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-          }
-      }
-  });
+        broadcaster: 'pusher',
+        key: '7920bc1f6b143eecdd33',
+        cluster: 'eu',
+        encrypted: true,
+        forceTLS: true,
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        }
+    });
 
-  // Connection monitoring
-  window.Echo.connector.pusher.connection.bind('connected', () => {
-      console.log('✅ Pusher connected successfully');
-  });
+    // Connection monitoring
+    window.Echo.connector.pusher.connection.bind('connected', () => {
+        console.log('Pusher connected successfully');
+    });
 
   const supervisorId = {{ auth()->id() }};
   const supervisorChannel = window.Echo.private(`supervisor.${supervisorId}`);

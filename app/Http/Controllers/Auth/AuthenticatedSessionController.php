@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
     
             // Define different logout messages based on role
             $logMessage = match ($role) {
-                
+                0 => "the Supervisor just logged out",
                 1 => "the Magazinier just logged out",
                 2 => "the Cashier just closed the store",
            

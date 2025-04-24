@@ -53,20 +53,21 @@ class OrderController extends Controller
         }
     
         // Get magazinier's user ID
-        $magazinierUserId = 6; // You should use a more dynamic way to get this
+        $magazinier = 3;
+ // i should use a more dynamic way to get this
     
         // Create the notification message
         $notificationMessage = "New order #{$order->id} requires processing";
     
         // Save notification to database
         $notification = Notification::create([
-            'user_id' => $magazinierUserId,
+            'user_id' => $magazinier,
             'message' => $notificationMessage,
             'is_read' => false,
         ]);
     
         // Broadcast the event with the notification ID
-        event(new NewOrderNotification($notificationMessage,$magazinierUserId,  $notification->id));
+        event(new NewOrderNotification($notificationMessage,$magazinier,  $notification->id));
         
         // Log activity
         ActivityHelper::log("Created a new order", $order);

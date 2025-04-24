@@ -233,12 +233,11 @@
   </div>
   
   <!-- Audio element for notification sound -->
-  <audio id="notification-sound" preload="auto">
-      <!-- Direct URL to notification sound -->
-      <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
-      <!-- Fallback sound -->
-      <source src="https://assets.mixkit.co/active_storage/sfx/1513/1513-preview.mp3" type="audio/mpeg">
-  </audio>
+ <!-- Notification sound -->
+<audio id="notification-sound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
   
   <!-- Load Pusher JS library -->
   <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
@@ -247,11 +246,14 @@
   <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
   
   <script>
+  
+
+
       // Initialize Echo with Pusher
       window.Echo = new Echo({
           broadcaster: 'pusher',
-          key: '{{ env('PUSHER_APP_KEY') }}',
-          cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+          key: '7920bc1f6b143eecdd33',
+          cluster: 'eu',
           encrypted: true
       });
   
@@ -271,30 +273,24 @@
       window.Echo.channel(`magazinier.${userId}`)
           .listen('.App\\Events\\NewOrderNotification', (data) => {
               console.log('Received notification:', data);
-              
-              // Play notification sound
-              playNotificationSound();
+      
               
               // Create notification element
               createNotification(data.message);
           });
       
-      // Function to play notification sound
-      function playNotificationSound() {
+      
+          // Function to play notification sound
+    function playNotificationSound() {
           const sound = document.getElementById('notification-sound');
           
-          // Reset the audio to the beginning (in case it's already playing)
-          sound.currentTime = 0;
-          
-          // Play the sound
-          sound.play().catch(error => {
-              // Handle any errors with playing the sound (e.g., user hasn't interacted with page yet)
-              console.error('Error playing notification sound:', error);
-          });
-      }
-          
+        sound.currentTime = 0;
+        sound.play().catch(console.warn);
+  
+      }  
       // Function to create and animate notifications
       function createNotification(message) {
+        playNotificationSound();
           // Create container
           const notification = document.createElement('div');
           notification.className = 'notification bg-white shadow-lg rounded-lg p-4 border-l-4 border-blue-500 transform translate-x-full opacity-0 transition-all duration-500 flex gap-3 items-start max-w-sm';
