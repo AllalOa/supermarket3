@@ -25,6 +25,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'profile_picture',
+        'foyer_id',
     ];
 
     /**
@@ -58,5 +59,20 @@ class User extends Authenticatable
 public function suspensions()
 {
     return $this->hasMany(Suspension::class);
+}
+
+public function foyer()
+{
+    return $this->belongsTo(Foyer::class);
+}
+
+
+
+/**
+ * Check if this user is a chief of any foyer.
+ */
+public function isChief()
+{
+    return Foyer::where('chief_id', $this->id)->exists();
 }
 }

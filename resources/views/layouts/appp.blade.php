@@ -15,6 +15,7 @@
     <!-- Include Alpine.js if not already included -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
     <style>
         .card {
@@ -131,6 +132,13 @@
                         <i class="fas fa-home w-5 mr-3"></i> Dashboard
                     </a>
                 </li>
+                
+                <li>
+            <a href="{{ route('supervisor.foyers') }}"
+                class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('supervisor.foyers') ? 'active' : 'text-gray-700' }}">
+                <i class="fas fa-house-user w-5 mr-3"></i> Gestion des Foyers
+            </a>
+        </li>
                 <li>
                     <a href="{{ route('add.cashier') }}"
                         class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('add.cashier') ? 'active' : 'text-gray-700' }}">

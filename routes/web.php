@@ -8,6 +8,7 @@ use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\FoyerController;
 use App\Models\Product;
 use App\Models\Order;
 
@@ -112,6 +113,25 @@ Route::middleware('rolemanager:supervisor')->group(function () {
     Route::get('/orders/{order}', [AnalyticsController::class, 'show']);
     Route::get('/order-details/{orderId}', [AnalyticsController::class, 'getOrderDetails']);
     Route::get('/all-activities', [AnalyticsController::class, 'getAllActivities']);
+
+
+
+   
+    
+    
+
+
+     Route::get('/foyers', [FoyerController::class, 'index'])->name('supervisor.foyers');
+    Route::post('/foyers', [FoyerController::class, 'store'])->name('foyers.store');
+    Route::get('/foyers/{id}', [FoyerController::class, 'show'])->name('foyers.show');
+    Route::put('/foyers/{id}', [FoyerController::class, 'update'])->name('foyers.update');
+    Route::delete('/foyers/{id}', [FoyerController::class, 'destroy'])->name('foyers.destroy');
+    
+    // Chief and worker management routes
+    Route::get('/foyers/chiefs/available', [FoyerController::class, 'getAvailableChiefs'])->name('foyers.chiefs.available');
+    Route::post('/foyers/{id}/workers', [FoyerController::class, 'addWorker'])->name('foyers.workers.add');
+    Route::delete('/foyers/{foyerId}/workers/{userId}', [FoyerController::class, 'removeWorker'])->name('foyers.workers.remove');
+   
 });
 
 // Apply role middleware to magazinier routes

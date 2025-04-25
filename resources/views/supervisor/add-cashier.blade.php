@@ -81,7 +81,7 @@
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="w-full bg-[#4361ee] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#3f37c9] transition-all">
+    <button type="submit" class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-all">
       <i class="fas fa-user-plus"></i> Add Cashier
     </button>
   </form>
