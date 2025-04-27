@@ -63,6 +63,17 @@ class FoyerController extends Controller
             'data' => $foyer
         ]);
     }
+    /**
+ * Show the form for editing the specified foyer.
+ */
+public function edit($id)
+{
+    $foyer = Foyer::with(['chief', 'workers'])->findOrFail($id);
+    return response()->json([
+        'status' => true,
+        'data' => $foyer
+    ]);
+}
 
     /**
      * Update the specified foyer in the database.
@@ -170,4 +181,16 @@ class FoyerController extends Controller
             'message' => 'Worker removed successfully'
         ]);
     }
+
+    public function getAvailableUsers($id)
+{
+    $foyer = Foyer::findOrFail($id);
+    $availableUsers = User::whereNull('foyer_id')
+        ->get(['id', 'name', 'email']);
+
+    return response()->json([
+        'status' => true,
+        'data' => $availableUsers
+    ]);
+}
 }

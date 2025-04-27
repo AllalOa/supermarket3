@@ -440,15 +440,15 @@
                     <!-- Chief Information -->
                     <div class="px-6 py-4 bg-indigo-50 border-b">
                         <div class="flex items-center">
-                            <div class="bg-indigo-100 p-2 rounded-full mr-4">
+                        
    
 <img src="${foyer.chief.profile_picture ? '/storage/' + foyer.chief.profile_picture : '/images/default-avatar.png'}"
      alt="Chief Picture"
-     class="h-10 w-10 rounded-full object-cover">
+     class="h-12 w-12 mr-4  rounded-full object-cover">
 
         
 
-                            </div>
+                           
                             <div>
                                 <div class="text-sm text-indigo-600 font-medium">Le Chef</div>
                                 <div class="text-gray-800 font-medium">${foyer.chief?.name || 'Not assigned'}</div>
@@ -483,31 +483,33 @@
         }
 
         // Render workers list for a foyer
-        function renderWorkersList(workers) {
-            if (workers.length === 0) {
-                return '<p class="text-gray-500 text-sm py-2">No workers assigned to this foyer yet.</p>';
-            }
+function renderWorkersList(workers, foyerId) {
+    if (workers.length === 0) {
+        return '<p class="text-gray-500 text-sm py-2">No workers assigned to this foyer yet.</p>';
+    }
 
-            return workers.map(worker => `
-                <div class="py-3 flex justify-between items-center">
-                    <div class="flex items-center">
-                        <div class="bg-gray-100 p-1.5 rounded-full mr-3">
-                            <i class="fas fa-user h-4 w-4 text-gray-600"></i>
-                        </div>
-                        <div>
-                            <div class="text-gray-800">${worker.name}</div>
-                            <div class="text-gray-500 text-sm">${worker.email}</div>
-                        </div>
-                    </div>
-                    <button 
-                        onclick="removeWorker(${worker.id})" 
-                        class="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-full transition-colors"
-                    >
-                        <i class="fas fa-times h-4 w-4"></i>
-                    </button>
+    return workers.map(worker => `
+        <div class="py-3 flex justify-between items-center">
+            <div class="flex items-center">
+               
+                    
+                 <img src="${worker.profile_picture ? '/storage/' + worker.profile_picture : '/images/default-avatar.png'}"alt="Chief Picture"
+     class="h-11 w-11 mr-4  rounded-full object-cover">
+                   
+                <div>
+                    <div class="text-gray-800">${worker.name}</div>
+                    <div class="text-gray-500 text-sm">${worker.phone}</div>
                 </div>
-            `).join('');
-        }
+            </div>
+            <button 
+                onclick="removeWorker(${worker.id}, ${worker.foyer_id})" 
+                class="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-full transition-colors"
+            >
+                <i class="fas fa-times h-4 w-4"></i>
+            </button>
+        </div>
+    `).join('');
+}
 
         // Toggle foyer expansion
         function toggleFoyerExpand(foyerId) {
@@ -591,65 +593,101 @@ function createNewFoyer() {
 }
 
         // Open edit foyer modal
-        function editFoyer(foyerId) {
-            fetch(`{{ url('foyers') }}/${foyerId}/edit`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status) {
-                        const foyer = data.data;
-                        
-                        // Fill the form
-                        document.getElementById('edit-foyer-id').value = foyer.id;
-                        document.getElementById('edit-foyer-name').value = foyer.name;
-                        document.getElementById('edit-foyer-description').value = foyer.description || '';
-                        document.getElementById('edit-foyer-status').value = foyer.stat;
-                        document.getElementById('edit-foyer-chief').value = foyer.chief_id || '';
-                        
-                        // Show the modal
-                        editModal.classList.remove('hidden');
-                    } else {
-                        toastr.error(data.message || 'Failed to load foyer data.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading foyer data:', error);
-                    toastr.error('An error occurred while loading foyer data.');
-                });
-        }
+function editFoyer(foyerId) {
+    console.log("Edit function called for foyer ID:", foyerId);
+    
+    fetch(`{{ url('foyers') }}/${foyerId}/edit`)
+        .then(response => {
+            console.log("Response received:", response);
+            return response.json();
+        })
+        .then(data => {
+            console.log("Data received:", data);
+            if (data.status) {
+                const foyer = data.data;
+                
+                // Fill the form
+                document.getElementById('edit-foyer-id').value = foyer.id;
+                document.getElementById('edit-foyer-name').value = foyer.name;
+                document.getElementById('edit-foyer-description').value = foyer.description || '';
+                document.getElementById('edit-foyer-status').value = foyer.stat;
+                document.getElementById('edit-foyer-chief').value = foyer.chief_id || '';
+                
+                // Show the modal
+                editModal.classList.remove('hidden');
+                console.log("Modal should be visible now");
+            } else {
+                console.error("Error in response:", data.message);
+                toastr.error(data.message || 'Failed to load foyer data.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading foyer data:', error);
+            toastr.error('An error occurred while loading foyer data.');
+        });
+}
 
         // Save edited foyer
-        function saveEditedFoyer() {
-            const foyerId = document.getElementById('edit-foyer-id').value;
-            const formData = new FormData(editFoyerForm);
-            
-            fetch(`{{ url('foyers') }}/${foyerId}`, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    // Success
-                    toastr.success('Foyer updated successfully!');
-                    editModal.classList.add('hidden');
-                    loadFoyers();
-                } else {
-                    // Error
-                    toastr.error(data.message || 'Failed to update foyer.');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating foyer:', error);
-                toastr.error('An error occurred while updating the foyer.');
+function saveEditedFoyer() {
+    const foyerId = document.getElementById('edit-foyer-id').value;
+    const formData = new FormData(editFoyerForm);
+    
+    // Debug what's being sent
+    console.log("Form data being sent:");
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    
+    // Add this for Laravel to process it as PUT
+    formData.append('_method', 'PUT');
+    
+    fetch(`{{ url('foyers') }}/${foyerId}`, {
+        method: 'POST', // Keep as POST since we're using _method field
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            // Success
+            Swal.fire({
+                title: 'Success!',
+                text: 'Foyer updated successfully!',
+                icon: 'success',
+                confirmButtonText: 'Great!',
+                confirmButtonColor: '#4f46e5'
+            }).then(() => {
+                editModal.classList.add('hidden');
+                window.location.reload(); // Reload to see changes
+            });
+        } else {
+            // Error
+            Swal.fire({
+                title: 'Error!',
+                text: data.message || 'Failed to update foyer.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#4f46e5'
             });
         }
+    })
+    .catch(error => {
+        console.error('Error updating foyer:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while updating the foyer.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#4f46e5'
+        });
+    });
+}
 
         // Delete foyer
-        function deleteFoyer(foyerId) {
+function deleteFoyer(foyerId) {
     // Use SweetAlert for confirmation instead of default confirm
     Swal.fire({
         title: 'Are you sure?',
@@ -706,46 +744,111 @@ function createNewFoyer() {
 }
 
         // Open add worker modal
-        function openAddWorkerModal(foyerId) {
-            document.getElementById('worker-foyer-id').value = foyerId;
-            
-            // Load available users
-            fetch(`{{ url('foyers/available-users') }}/${foyerId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status) {
-                        const userSelect = document.getElementById('worker-user-id');
-                        
-                        // Clear existing options
-                        userSelect.innerHTML = '<option value="">Select User</option>';
-                        
-                        // Add new options
-                        data.data.forEach(user => {
-                            const option = document.createElement('option');
-                            option.value = user.id;
-                            option.textContent = `${user.name} (${user.email})`;
-                            userSelect.appendChild(option);
-                        });
-                        
-                        // Show the modal
-                        addWorkerModal.classList.remove('hidden');
-                    } else {
-                        toastr.error(data.message || 'Failed to load available users.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading available users:', error);
-                    toastr.error('An error occurred while loading available users.');
+function openAddWorkerModal(foyerId) {
+    document.getElementById('worker-foyer-id').value = foyerId;
+    
+    // Load available users
+    fetch(`{{ url('foyers') }}/${foyerId}/available-users`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status) {
+                const userSelect = document.getElementById('worker-user-id');
+                
+                // Clear existing options
+                userSelect.innerHTML = '<option value="">Select User</option>';
+                
+                // Add new options
+                data.data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.name} (${user.email})`;
+                    userSelect.appendChild(option);
                 });
-        }
+                
+                // Show the modal
+                addWorkerModal.classList.remove('hidden');
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message || 'Failed to load available users.',
+                    icon: 'error',
+                    confirmButtonColor: '#4f46e5'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading available users:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while loading available users.',
+                icon: 'error',
+                confirmButtonColor: '#4f46e5'
+            });
+        });
+}
 
         // Submit add worker form
-        function submitAddWorker() {
-            const formData = new FormData(addWorkerForm);
-            
-            fetch("", {
-                method: 'POST',
-                body: formData,
+ function submitAddWorker() {
+    const formData = new FormData(addWorkerForm);
+    const foyerId = document.getElementById('worker-foyer-id').value;
+    
+    fetch(`{{ url('foyers') }}/${foyerId}/workers`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            // Success
+            Swal.fire({
+                title: 'Success!',
+                text: 'Worker added successfully!',
+                icon: 'success',
+                confirmButtonColor: '#4f46e5'
+            }).then(() => {
+                addWorkerModal.classList.add('hidden');
+                window.location.reload(); // Reload to see changes
+            });
+        } else {
+            // Error
+            Swal.fire({
+                title: 'Error!',
+                text: data.message || 'Failed to add worker.',
+                icon: 'error',
+                confirmButtonColor: '#4f46e5'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error adding worker:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while adding the worker.',
+            icon: 'error',
+            confirmButtonColor: '#4f46e5'
+        });
+    });
+}
+
+        // Remove worker
+function removeWorker(workerId, foyerId) {
+    
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to remove this worker from the foyer?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, remove them!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`{{ url('foyers') }}/${foyerId}/workers/${workerId}`, {
+                method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     'Accept': 'application/json',
@@ -755,47 +858,36 @@ function createNewFoyer() {
             .then(data => {
                 if (data.status) {
                     // Success
-                    toastr.success('Worker added successfully!');
-                    addWorkerModal.classList.add('hidden');
-                    loadFoyers();
+                    Swal.fire({
+                        title: 'Removed!',
+                        text: 'Worker removed successfully!',
+                        icon: 'success',
+                        confirmButtonColor: '#4f46e5'
+                    }).then(() => {
+                        window.location.reload(); // Reload to see changes
+                    });
                 } else {
                     // Error
-                    toastr.error(data.message || 'Failed to add worker.');
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message || 'Failed to remove worker.',
+                        icon: 'error',
+                        confirmButtonColor: '#4f46e5'
+                    });
                 }
             })
             .catch(error => {
-                console.error('Error adding worker:', error);
-                toastr.error('An error occurred while adding the worker.');
+                console.error('Error removing worker:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while removing the worker.',
+                    icon: 'error',
+                    confirmButtonColor: '#4f46e5'
+                });
             });
         }
-
-        // Remove worker
-        function removeWorker(workerId) {
-            if (confirm('Are you sure you want to remove this worker from the foyer?')) {
-                fetch(`{{ url('foyers/remove-worker') }}/${workerId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Accept': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status) {
-                        // Success
-                        toastr.success('Worker removed successfully!');
-                        loadFoyers();
-                    } else {
-                        // Error
-                        toastr.error(data.message || 'Failed to remove worker.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error removing worker:', error);
-                    toastr.error('An error occurred while removing the worker.');
-                });
-            }
-        }
+    });
+}
     </script>
 </body>
 

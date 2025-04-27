@@ -125,9 +125,12 @@ Route::middleware('rolemanager:supervisor')->group(function () {
     Route::post('/foyers', [FoyerController::class, 'store'])->name('foyers.store');
     Route::get('/foyers/{id}', [FoyerController::class, 'show'])->name('foyers.show');
     Route::put('/foyers/{id}', [FoyerController::class, 'update'])->name('foyers.update');
+    Route::get('/foyers/{id}/edit', [FoyerController::class, 'edit'])->name('foyers.edit');
     Route::delete('/foyers/{id}', [FoyerController::class, 'destroy'])->name('foyers.destroy');
     
     // Chief and worker management routes
+    Route::get('/foyers/{id}/available-users', [FoyerController::class, 'getAvailableUsers'])->name('foyers.users.available');
+
     Route::get('/foyers/chiefs/available', [FoyerController::class, 'getAvailableChiefs'])->name('foyers.chiefs.available');
     Route::post('/foyers/{id}/workers', [FoyerController::class, 'addWorker'])->name('foyers.workers.add');
     Route::delete('/foyers/{foyerId}/workers/{userId}', [FoyerController::class, 'removeWorker'])->name('foyers.workers.remove');
