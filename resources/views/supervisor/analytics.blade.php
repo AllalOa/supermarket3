@@ -51,7 +51,7 @@
                     <div>
                         <p class="text-gray-500 text-sm font-medium mb-1">Total Sells (24h)</p>
                         <h2 class="text-3xl font-bold text-gray-900">
-                            {{ number_format($transactions->sum('total_sales'), 2) }} DA</h2>
+                            {{ number_format($orderstotal, 2) }} DA</h2>
                         <div class="flex items-center mt-2 text-sm">
                             <span class="text-green-500 font-medium flex items-center">
                                 <i class="fas fa-arrow-up mr-1"></i>168%

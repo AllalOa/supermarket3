@@ -8,8 +8,7 @@ use App\Models\Promotion;
 use App\Models\Product;
 use App\Models\Suspension;
 use Illuminate\Support\Facades\DB;
-
-
+use Illuminate\Support\Facades\View;
 
 class SupervisorDashboardController extends Controller
 {

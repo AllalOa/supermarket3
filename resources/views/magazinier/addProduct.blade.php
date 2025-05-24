@@ -2,112 +2,210 @@
 @section('title', 'Add Product')
 
 @section('content')
-<div class="max-w-2xl mx-auto my-8">
-    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-        <div class="flex items-center mb-6">
-            <div class="h-10 w-1 bg-blue-600 rounded-full mr-3"></div>
-            <h2 class="text-2xl font-bold text-gray-800">Add a New Product</h2>
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Add New Product</h1>
+            <p class="mt-2 text-sm text-gray-600">Fill in the product details below</p>
         </div>
-        
-        @if(session('success'))
-            <div class="p-4 mb-6 text-green-700 bg-green-50 rounded-lg border border-green-200 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                {{ session('success') }}
-            </div>
-        @endif
-        
-        <form action="{{ route('storeProduct') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-            @csrf
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Barcode</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm4 0v12h4V4H7zm5 0a1 1 0 011-1h3a1 1 0 011 1v12a1 1 0 01-1 1h-3a1 1 0 01-1-1V4z" clip-rule="evenodd" />
-                            </svg>
+
+        <!-- Add Product Form Card -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div class="p-6 sm:p-8">
+                <form id="addProductForm" action="{{ route('storeProduct') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    @csrf
+                    
+                    <!-- Product Image Upload Section -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-center">
+                            <div class="w-full max-w-md">
+                                <label class="flex flex-col items-center px-4 py-6 bg-gray-50 rounded-xl border-2 border-gray-200 border-dashed cursor-pointer hover:bg-gray-100 transition-colors">
+                                    <div class="flex flex-col items-center">
+                                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                        <span class="text-sm font-medium text-gray-600">Drop your product image here</span>
+                                        <span class="text-xs text-gray-500 mt-1">or click to browse</span>
+                                    </div>
+                                    <input type="file" name="product_picture" accept="image/*" class="hidden">
+                                </label>
+                            </div>
                         </div>
-                        <input type="text" name="barcode" class="pl-10 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
                     </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                    <input type="text" name="name" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select name="category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled selected>Select a category</option>
-                        <option value="Food">Food</option>
-                        <option value="Beverages">Beverages</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Home">Home</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                    <input type="number" name="quantity" min="0" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500">$</span>
+
+                    <!-- Product Details Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left Column -->
+                        <div class="space-y-6">
+                            <!-- Barcode -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Barcode <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-barcode text-gray-400"></i>
+                                    </div>
+                                    <input type="text" 
+                                           name="barcode" 
+                                           required 
+                                           class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+                                           placeholder="Enter barcode">
+                                </div>
+                            </div>
+
+                            <!-- Product Name -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Product Name <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-box text-gray-400"></i>
+                                    </div>
+                                    <input type="text" 
+                                           name="name" 
+                                           required 
+                                           class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+                                           placeholder="Enter product name">
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Category <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-tags text-gray-400"></i>
+                                    </div>
+                                    <select name="category" 
+                                            class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors appearance-none">
+                                        <option value="">Select a category</option>
+                                        <option value="Food">Food</option>
+                                        <option value="Beverages">Beverages</option>
+                                        <option value="Electronics">Electronics</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <i class="fas fa-chevron-down text-gray-400"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <input type="number" name="price" step="0.01" min="0" class="pl-8 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Unit Price</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500">$</span>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <!-- Quantity -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-cubes text-gray-400"></i>
+                                    </div>
+                                    <input type="number" 
+                                           name="quantity" 
+                                           required 
+                                           min="0"
+                                           class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+                                           placeholder="Enter quantity">
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Price (DA) <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-tag text-gray-400"></i>
+                                    </div>
+                                    <input type="number" 
+                                           name="price" 
+                                           required 
+                                           step="0.01"
+                                           min="0"
+                                           class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+                                           placeholder="Enter price">
+                                </div>
+                            </div>
+
+                            <!-- Unit Price -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Unit Price (DA) <span class="text-red-500">*</span></label>
+                                <div class="relative rounded-lg shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-money-bill text-gray-400"></i>
+                                    </div>
+                                    <input type="number" 
+                                           name="unit_price" 
+                                           required 
+                                           step="0.01"
+                                           min="0"
+                                           class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors"
+                                           placeholder="Enter unit price">
+                                </div>
+                            </div>
                         </div>
-                        <input type="number" name="unit_price" step="0.01" min="0" class="pl-8 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" required>
                     </div>
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Product Picture</label>
-                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
-                    <div class="space-y-1 text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <div class="flex text-sm text-gray-600">
-                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                                <span>Upload a file</span>
-                                <input id="file-upload" name="product_picture" type="file" accept="image/*" class="sr-only">
-                            </label>
-                            <p class="pl-1">or drag and drop</p>
-                        </div>
-                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-end space-x-4 pt-6 mt-6 border-t">
+                        <a href="{{ route('magazinier.inventory') }}" 
+                           class="px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-800 transition-colors duration-200">
+                            Cancel
+                        </a>
+                        <button type="submit" 
+                                class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-sm">
+                            Add Product
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
-            
-            <div class="flex items-center justify-end pt-4">
-                <button type="button" class="px-6 py-2 border border-gray-300 rounded-lg mr-3 hover:bg-gray-50 transition">
-                    Cancel
-                </button>
-                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                    Add Product
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<!-- Add this at the end of your content section -->
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('addProductForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message || 'Product added successfully',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route("magazinier.inventory") }}';
+                    }
+                });
+            } else {
+                throw new Error(data.message || 'Failed to add product');
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: 'Error!',
+                text: error.message || 'Something went wrong',
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        });
+    });
+});
+</script>
+@endpush
 @endsection

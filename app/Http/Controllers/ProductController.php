@@ -19,34 +19,53 @@ class ProductController extends Controller
     // Store New Product
     public function store(Request $request)
     {
-        $request->validate([
-            'barcode' => 'required|unique:products',
-            'name' => 'required|string|max:255',
-            'category' => 'required|string',
-            'quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0',
-            'unit_price' => 'required|numeric|min:0',
-            'product_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048' // Validate product picture
-        ]);
+        try {
+            $request->validate([
+                'barcode' => 'required|unique:products',
+                'name' => 'required|string|max:255',
+                'category' => 'required|string',
+                'quantity' => 'required|integer|min:0',
+                'price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0',
+                'product_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
 
-        $productPicturePath = null;
+            $productPicturePath = null;
 
-        if ($request->hasFile('product_picture')) {
-            $productPicturePath = $request->file('product_picture')->store('product_images', 'public'); // Store image in public storage
+            if ($request->hasFile('product_picture')) {
+                $productPicturePath = $request->file('product_picture')->store('product_images', 'public');
+            }
+
+            $product = Product::create([
+                'barcode' => $request->barcode,
+                'product_picture' => $productPicturePath,
+                'name' => $request->name,
+                'category' => $request->category,
+                'quantity' => $request->quantity,
+                'price' => $request->price,
+                'unit_price' => $request->unit_price,
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product added successfully!',
+                    'product' => $product
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Product added successfully!');
+
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        Product::create([
-            'barcode' => $request->barcode,
-            'product_picture' => $productPicturePath, // Save product picture path
-            'name' => $request->name,
-            'category' => $request->category,
-            'quantity' => $request->quantity,
-            'price' => $request->price,
-            'unit_price' => $request->unit_price,
-
-        ]);
-
-        return redirect()->back()->with('success', 'Product added successfully!');
     }
 
     public function inventory()
@@ -75,25 +94,54 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0',
-            'unit_price' => 'required|numeric|min:0',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'category' => 'required|string|max:255',
+                'quantity' => 'required|integer|min:0',
+                'price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0',
+                'product_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            ]);
 
-        // Find the product and update
-        $product = Product::findOrFail($id);
-        $product->update([
-            'name' => $request->name,
-            'category' => $request->category,
-            'quantity' => $request->quantity,
-            'price' => $request->price,
-            'unit_price' => $request->unit_price,
-        ]);
+            // Find the product
+            $product = Product::findOrFail($id);
+            
+            // Update basic info
+            $product->name = $request->name;
+            $product->category = $request->category;
+            $product->quantity = $request->quantity;
+            $product->price = $request->price;
+            $product->unit_price = $request->unit_price;
 
-        return redirect()->route('magazinier.inventory')->with('success', 'Product updated successfully');
+            // Handle image upload if provided
+            if ($request->hasFile('product_picture')) {
+                $productPicturePath = $request->file('product_picture')->store('product_images', 'public');
+                $product->product_picture = $productPicturePath;
+            }
+
+            $product->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully!',
+                'product' => $product
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Product update error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating product: ' . $e->getMessage()
+            ], 500);
+        }
     }
     public function destroy($id)
     {

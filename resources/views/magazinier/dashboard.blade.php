@@ -1,133 +1,129 @@
 @extends('layouts.app-magazinier')
 @section('title', 'Dashboard')
 @section('content')
-<!-- Dashboard Content -->
-<div id="dashboard" class="content-section py-6 px-4 md:px-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Warehouse Dashboard</h1>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- Total Products Card -->
-        <a href="{{route('magazinier.inventory')}}" class="block">
-            <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl shadow hover:shadow-lg transition-all duration-300 border border-blue-100 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <div class="relative z-10">
-                        <p class="text-gray-600 font-medium mb-1">Total Products</p>
-                        <p id="totalProducts" class="text-3xl font-bold text-gray-800">{{ $totalProducts }}</p>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full relative z-10">
-                        <i class="fas fa-boxes text-2xl text-blue-600"></i>
-                    </div>
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Stock Management</h1>
+                    <p class="mt-2 text-sm text-gray-600">Monitor your inventory and orders</p>
                 </div>
-                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-8 -mt-8 opacity-30"></div>
-            </div>
-        </a>
-        
-        <!-- Pending Orders Card -->
-        <a href="{{ route('magazinier.orders')}}" class="block">
-            <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl shadow hover:shadow-lg transition-all duration-300 border border-purple-100 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <div class="relative z-10">
-                        <p class="text-gray-600 font-medium mb-1">Pending Orders</p>
-                        <p class="text-3xl font-bold text-gray-800">{{ $pendingOrders }}</p>
-                    </div>
-                    <div class="bg-purple-100 p-3 rounded-full relative z-10">
-                        <i class="fas fa-clipboard-list text-2xl text-purple-600"></i>
-                    </div>
+                <div class="flex items-center space-x-3">
+                    <span class="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                        <i class="fas fa-clock mr-2"></i>{{ now()->format('d M Y') }}
+                    </span>
                 </div>
-                <div class="absolute top-0 right-0 w-24 h-24 bg-purple-100 rounded-full -mr-8 -mt-8 opacity-30"></div>
-            </div>
-        </a>
-        
-        <!-- Low Stock Items Card -->
-        <a href="{{route('magazinier.inventory')}}" class="block">
-            <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-xl shadow hover:shadow-lg transition-all duration-300 border border-red-100 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <div class="relative z-10">
-                        <p class="text-gray-600 font-medium mb-1">Low Stock Items</p>
-                        <p id="lowStock" class="text-3xl font-bold text-gray-800">{{ $lowStockProducts }}</p>
-                    </div>
-                    <div class="bg-red-100 p-3 rounded-full relative z-10">
-                        <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
-                    </div>
-                </div>
-                <div class="absolute top-0 right-0 w-24 h-24 bg-red-100 rounded-full -mr-8 -mt-8 opacity-30"></div>
-            </div>
-        </a>
-    </div>
-    
-    <!-- Recent Activity Section -->
-    <div class="bg-white p-6 rounded-xl shadow border border-gray-100 mt-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h2>
-        <div class="space-y-4">
-            @if(isset($recentActivities) && count($recentActivities) > 0)
-                @foreach($recentActivities as $activity)
-                <div class="flex items-center gap-3 p-3 border-b border-gray-100">
-                    <div class="flex-shrink-0">
-                        @if($activity->type == 'order')
-                            <div class="bg-purple-100 p-2 rounded-full">
-                                <i class="fas fa-shopping-cart text-purple-500"></i>
-                            </div>
-                        @elseif($activity->type == 'inventory')
-                            <div class="bg-blue-100 p-2 rounded-full">
-                                <i class="fas fa-box text-blue-500"></i>
-                            </div>
-                        @else
-                            <div class="bg-gray-100 p-2 rounded-full">
-                                <i class="fas fa-history text-gray-500"></i>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="flex-grow">
-                        <p class="text-sm font-medium text-gray-800">{{ $activity->description }}</p>
-                        <p class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</p>
-                    </div>
-                </div>
-                @endforeach
-            @else
-                <p class="text-gray-500 text-center py-4">No recent activities to display</p>
-            @endif
-        </div>
-    </div>
-    
-    <!-- Quick Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <!-- Recent Orders Chart -->
-        <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h2>
-            <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-                <!-- Replace with your actual chart -->
-                <p class="text-gray-500">Order chart will appear here</p>
             </div>
         </div>
-        
-        <!-- Inventory Status -->
-        <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Inventory Status</h2>
-            <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-                <!-- Replace with your actual chart -->
-                <p class="text-gray-500">Inventory chart will appear here</p>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Total Products Card -->
+            <a href="{{route('magazinier.inventory')}}" class="block group">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-boxes text-xl text-white"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Inventory
+                        </span>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-sm font-medium text-gray-500">Total Products</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p id="totalProducts" class="text-3xl font-bold text-gray-900">{{ $totalProducts }}</p>
+                            <span class="ml-2 text-sm text-gray-500">items</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Pending Orders Card -->
+            <a href="{{ route('magazinier.orders')}}" class="block group" rel="noopener noreferrer">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clipboard-list text-xl text-white"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            Orders
+                        </span>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-sm font-medium text-gray-500">Pending Orders</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p class="text-3xl font-bold text-gray-900">{{ $pendingOrders }}</p>
+                            <span class="ml-2 text-sm text-gray-500">orders</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Low Stock Items Card -->
+            <a href="{{route('magazinier.inventory')}}" class="block group">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-xl text-white"></i>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Alert
+                        </span>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-sm font-medium text-gray-500">Low Stock Items</p>
+                        <div class="mt-2 flex items-baseline">
+                            <p id="lowStock" class="text-3xl font-bold text-gray-900">{{ $lowStockProducts }}</p>
+                            <span class="ml-2 text-sm text-gray-500">items</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="" 
+                       class="group flex items-center p-4 rounded-xl border border-gray-200 hover:border-green-200 hover:bg-green-50 transition-all duration-200">
+                        <div class="shrink-0 w-10 h-10 bg-gradient-to-br from-green-400 to-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-plus text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-semibold text-gray-900 group-hover:text-green-700">Add Product</p>
+                            <p class="text-xs text-gray-500 group-hover:text-green-600">Create new item</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('magazinier.inventory') }}" 
+                       class="group flex items-center p-4 rounded-xl border border-gray-200 hover:border-blue-200 hover:bg-blue-50 transition-all duration-200">
+                        <div class="shrink-0 w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-semibold text-gray-900 group-hover:text-blue-700">View Inventory</p>
+                            <p class="text-xs text-gray-500 group-hover:text-blue-600">Check stock levels</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('magazinier.orders') }}" 
+                       class="group flex items-center p-4 rounded-xl border border-gray-200 hover:border-purple-200 hover:bg-purple-50 transition-all duration-200">
+                        <div class="shrink-0 w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tasks text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-semibold text-gray-900 group-hover:text-purple-700">Manage Orders</p>
+                            <p class="text-xs text-gray-500 group-hover:text-purple-600">Process pending orders</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- Quick Access Buttons -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-        <a href="{{ route('magazinier.inventory') }}" class="flex items-center justify-center gap-2 bg-white p-4 rounded-xl shadow hover:shadow-md transition-all duration-300 border border-gray-100 text-center">
-            <i class="fas fa-boxes text-blue-500"></i>
-            <span class="font-medium text-gray-700">Manage Inventory</span>
-        </a>
-        <a href="{{ route('magazinier.orders') }}" class="flex items-center justify-center gap-2 bg-white p-4 rounded-xl shadow hover:shadow-md transition-all duration-300 border border-gray-100 text-center">
-            <i class="fas fa-clipboard-list text-purple-500"></i>
-            <span class="font-medium text-gray-700">View Orders</span>
-        </a>
-        <a href="#" class="flex items-center justify-center gap-2 bg-white p-4 rounded-xl shadow hover:shadow-md transition-all duration-300 border border-gray-100 text-center">
-            <i class="fas fa-truck text-green-500"></i>
-            <span class="font-medium text-gray-700">Shipments</span>
-        </a>
-        <a href="#" class="flex items-center justify-center gap-2 bg-white p-4 rounded-xl shadow hover:shadow-md transition-all duration-300 border border-gray-100 text-center">
-            <i class="fas fa-file-alt text-yellow-500"></i>
-            <span class="font-medium text-gray-700">Reports</span>
-        </a>
-    </div>
-</div>
+ 
 @endsection

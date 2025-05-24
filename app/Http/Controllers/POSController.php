@@ -23,6 +23,8 @@ class POSController extends Controller
         
         return view('cashier.pos', compact('billId', 'categories'));
     }
+
+    
     
     public function getProducts(Request $request)
     {
