@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Supermarket Pro - Magazinier')</title>
   <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -147,11 +148,8 @@
         <!-- Right side menu items -->
         <div class="flex items-center space-x-6">
           <!-- Notifications -->
-          <div class="relative">
-            <button class="text-gray-500 hover:text-blue-600 transition duration-300 relative">
-              <i class="fas fa-bell text-lg"></i>
-              <span class="notification-badge flex h-5 w-5 items-center justify-center bg-red-500 text-white text-xs rounded-full">2</span>
-            </button>
+          <div class="relative inline-block">
+            @include('partials.magazinier-notification-dropdown')
           </div>
           
           <!-- User Profile -->
@@ -225,6 +223,22 @@
     document.addEventListener('click', (event) => {
       if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
         userDropdown.classList.remove('show');
+      }
+    });
+
+    // Notifications Dropdown Toggle
+    const notificationsButton = document.getElementById('notifications-button');
+    const notificationsDropdown = document.getElementById('notifications-dropdown');
+
+    notificationsButton.addEventListener('click', (event) => {
+      event.stopPropagation(); // Prevent event from bubbling up
+      notificationsDropdown.classList.toggle('hidden');
+    });
+
+    // Close notifications dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!notificationsButton.contains(event.target) && !notificationsDropdown.contains(event.target)) {
+        notificationsDropdown.classList.add('hidden');
       }
     });
   </script>

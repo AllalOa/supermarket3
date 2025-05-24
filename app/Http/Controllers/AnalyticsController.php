@@ -25,6 +25,22 @@ class AnalyticsController extends Controller
         $startDate = $request->query('start_date', now()->startOfMonth()->toDateString()); // Default: Beginning of this month
         $endDate = $request->query('end_date', now()->toDateString()); // Default: Today
 
+        // Calculate total of approved orders for today
+        $orderstotal = Order::whereDate('created_at', today())
+            ->where('status', 'approved')
+            ->with(['orderDetails.product'])
+            ->get()
+            ->sum(function($order) {
+                return $order->orderDetails->sum(function($detail) {
+                    return $detail->quantity * $detail->product->price;
+                });
+            });
+
+        // Get today's orders with total amount
+        $orders = Order::whereDate('created_at', today())
+            ->with(['orderDetails.product'])
+            ->get();
+
         // Fetch sales per cashier
         $transactions = DB::table('bills')
             ->join('users', 'bills.cashier_id', '=', 'users.id')
@@ -132,7 +148,7 @@ class AnalyticsController extends Controller
         $allactivities = Activity::latest()->get();
         $activities = Activity::latest()->limit(5)->get(); // Fetch last 5 logs
 
-        return view('supervisor.analytics', compact('transactions','allactivities', 'totalOrdersToday', 'cashierBills', 'startDate', 'endDate', 'productSales', 'orderStats', 'dailyOrders', 'dates', 'weekOptions', 'selectedWeek', 'year', 'month', 'activities'));
+        return view('supervisor.analytics', compact('transactions','orderstotal', 'orders', 'allactivities', 'totalOrdersToday', 'cashierBills', 'startDate', 'endDate', 'productSales', 'orderStats', 'dailyOrders', 'dates', 'weekOptions', 'selectedWeek', 'year', 'month', 'activities'));
     }
 
 

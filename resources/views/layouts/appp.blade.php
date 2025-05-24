@@ -91,6 +91,41 @@
                 transform: translateX(0);
             }
         }
+
+        /* Notification Styles */
+        .notification {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Zero Stock Alert Styles */
+        .notification-zero-stock {
+            background-color: #FEE2E2;
+            border-left: 4px solid #DC2626;
+        }
+
+        /* Low Stock Alert Styles */
+        .notification-low-stock {
+            background-color: #FFEDD5;
+            border-left: 4px solid #F97316;
+        }
+
+        /* Text Colors */
+        .notification-zero-stock .notification-title {
+            color: #991B1B;
+        }
+
+        .notification-low-stock .notification-title {
+            color: #9A3412;
+        }
+
+        /* Icon Colors */
+        .notification-zero-stock .notification-icon {
+            color: #DC2626;
+        }
+
+        .notification-low-stock .notification-icon {
+            color: #F97316;
+        }
     </style>
 </head>
 
@@ -200,19 +235,10 @@
 
                 <!-- Right side menu items -->
                 <div class="flex items-center space-x-6">
-                    <!-- Theme Switcher -->
-                    <button class="text-gray-500 hover:text-blue-600 transition duration-300">
-                        <i class="fas fa-moon text-lg"></i>
-                    </button>
+                    
 
                     <!-- Notifications -->
-                    <div class="relative">
-                        <button class="text-gray-500 hover:text-blue-600 transition duration-300 relative">
-                            <i class="fas fa-bell text-lg"></i>
-                            <span
-                                class="notification-badge flex h-5 w-5 items-center justify-center bg-red-500 text-white text-xs rounded-full">3</span>
-                        </button>
-                    </div>
+                    @include('partials.notification-dropdown')
 
                     <!-- Messages -->
 
@@ -309,192 +335,128 @@
         });
     </script>
 
+    <!-- Notification Components -->
+    <div id="notifications-container" class="fixed bottom-5 right-5 flex flex-col-reverse gap-3 z-50">
+        <!-- Notifications will be dynamically added here -->
+    </div>
 
-<div id="notifications-container" class="fixed bottom-5 right-5 flex flex-col-reverse gap-3 z-50">
-  <!-- Notifications will be dynamically added here -->
-</div>
+    <!-- Connection status indicator -->
+    <div id="connection-status"
+        class="fixed bottom-5 left-5 p-2 rounded-lg bg-gray-800 text-white text-sm opacity-0 transition-opacity duration-300">
+        Connecting...
+    </div>
 
-<!-- Connection status indicator -->
-<div id="connection-status"
-  class="fixed bottom-5 left-5 p-2 rounded-lg bg-gray-800 text-white text-sm opacity-0 transition-opacity duration-300">
-  Connecting...
-</div>
+    <!-- Notification sound -->
+    <audio id="notification-sound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
-<!-- Notification sound -->
-<audio id="notification-sound" preload="auto">
-  <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+    <!-- Pusher and Echo -->
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 
-<!-- Pusher and Echo -->
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize Echo with Pusher
-  window.Echo = new Echo({
-        broadcaster: 'pusher',
-        key: '7920bc1f6b143eecdd33',
-        cluster: 'eu',
-        encrypted: true,
-        forceTLS: true,
-        authEndpoint: '/broadcasting/auth',
-        auth: {
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Echo with Pusher
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: '7920bc1f6b143eecdd33',
+            cluster: 'eu',
+            encrypted: true,
+            forceTLS: true,
+            authEndpoint: '/broadcasting/auth',
+            auth: {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
             }
+        });
+
+        // Connection monitoring
+        window.Echo.connector.pusher.connection.bind('connected', () => {
+            console.log('Pusher connected successfully');
+        });
+
+        const supervisorId = {{ auth()->id() }};
+        const supervisorChannel = window.Echo.private(`supervisor.${supervisorId}`);
+
+        function createNotification(message, type, productId, productName, quantity) {
+            playNotificationSound();
+            const container = document.getElementById('notifications-container');
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `
+                notification transform translate-x-full opacity-0
+                p-4 rounded-lg shadow-lg
+                flex items-center gap-3 max-w-sm
+                transition-all duration-500
+                ${type === 'zero_stock' ? 'notification-zero-stock' : 'notification-low-stock'}
+            `;
+
+            notification.innerHTML = `
+                <div class="notification-icon text-2xl">
+                    <i class="fas ${type === 'zero_stock' ? 'fa-exclamation-circle' : 'fa-exclamation-triangle'}"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="notification-title font-semibold mb-1">
+                        ${type === 'zero_stock' ? 'Zero Stock Alert!' : 'Low Stock Alert'}
+                    </h4>
+                    <p class="text-gray-800 text-sm">${message}</p>
+                    <p class="text-xs text-gray-600 mt-1">Product ID: ${productId}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" 
+                        class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full', 'opacity-0');
+            }, 10);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
         }
+
+        // Existing Zero Stock Alert Listener
+        supervisorChannel.listen('.zero.stock.alert', (data) => {
+            console.log("📢 Zero Stock Alert Received:", data);
+
+            if (data && data.message && data.product) {
+                createNotification(
+                    data.message,
+                    "zero_stock",
+                    data.product.id,
+                    data.product.name,
+                    data.product.quantity
+                );
+            }
+        });
+
+        // New Low Stock Alert Listener
+        supervisorChannel.listen('.low.stock.alert', (data) => {
+            console.log("📢 Low Stock Alert Received:", data);
+
+            if (data && data.message && data.product) {
+                createNotification(
+                    data.message,
+                    "low_stock",
+                    data.product.id,
+                    data.product.name,
+                    data.product.quantity
+                );
+            }
+        });
     });
-
-    // Connection monitoring
-    window.Echo.connector.pusher.connection.bind('connected', () => {
-        console.log('Pusher connected successfully');
-    });
-
-  const supervisorId = {{ auth()->id() }};
-  const supervisorChannel = window.Echo.private(`supervisor.${supervisorId}`);
-
-  // Existing Zero Stock Alert Listener
-  supervisorChannel.listen('.zero.stock.alert', (data) => {
-      console.log("📢 Zero Stock Alert Received:", data);
-
-      if (data && data.message && data.product) {
-          createNotification(
-              data.message,
-              "Stock Alert",
-              "zero_stock",
-              data.product.id,
-              data.product.name,
-              data.product.quantity
-          );
-      }
-  });
-
-  // New Low Stock Alert Listener
-  supervisorChannel.listen('.low.stock.alert', (data) => {
-      console.log("📢 Low Stock Alert Received:", data);
-
-      if (data && data.message && data.product) {
-          createNotification(
-              data.message,
-              "Low Stock Alert",
-              "low_stock",
-              data.product.id,
-              data.product.name,
-              data.product.quantity
-          );
-      }
-  });
-
-  // Function to play notification sound
-  function playNotificationSound() {
-      const sound = document.getElementById('notification-sound');
-      sound.currentTime = 0;
-      sound.play().catch(console.warn);
-  }
-
-  // Function to create notifications
-  function createNotification(message, title, type, id = null, productName = null, quantity = null) {
-      playNotificationSound();
-
-      const container = document.getElementById('notifications-container');
-      const notification = document.createElement('div');
-
-      // Notification styling based on type
-      let borderColor, bgColor, iconClass, textColor;
-      switch (type) {
-          case 'zero_stock':
-              borderColor = 'border-red-500';
-              bgColor = 'bg-red-50';
-              iconClass = 'fa-circle-exclamation';
-              textColor = 'text-red-700';
-              break;
-          case 'low_stock':
-              borderColor = 'border-yellow-500';
-              bgColor = 'bg-yellow-50';
-              iconClass = 'fa-triangle-exclamation';
-              textColor = 'text-yellow-700';
-              break;
-          default:
-              borderColor = 'border-blue-500';
-              bgColor = 'bg-blue-50';
-              iconClass = 'fa-circle-info';
-              textColor = 'text-blue-700';
-              break;
-      }
-
-      notification.className = `
-          notification transform translate-x-full opacity-0
-          p-4 rounded-lg border-l-4 shadow-lg
-          flex items-center gap-3 max-w-sm
-          transition-all duration-500
-          ${borderColor} ${bgColor}
-      `;
-
-      // Additional info for stock alerts
-      let additionalInfo = '';
-      if (id !== null) {
-          additionalInfo += `<p class="text-xs text-gray-600 mt-1">Product ID: ${id}</p>`;
-          if (productName !== null) {
-              additionalInfo += `<p class="text-xs text-gray-600 mt-1">${productName}</p>`;
-          }
-          if (quantity !== null) {
-              additionalInfo += `<p class="text-xs text-gray-600">Current Stock: ${quantity}</p>`;
-          }
-      }
-
-      notification.innerHTML = `
-          <i class="fas ${iconClass} text-lg ${textColor}"></i>
-          <div class="flex-1">
-              <h4 class="font-semibold mb-1 ${textColor}">${title}</h4>
-              <p class="text-gray-800 text-sm">${message}</p>
-              ${additionalInfo}
-          </div>
-          <button onclick="removeNotification(this.parentElement)" 
-                  class="text-gray-500 hover:text-gray-700 transition-colors">
-              <i class="fas fa-times"></i>
-          </button>
-      `;
-
-      container.appendChild(notification);
-      
-      // Animate in
-      setTimeout(() => notification.classList.remove('translate-x-full', 'opacity-0'), 10);
-      
-      // Auto-remove after 10 seconds
-      setTimeout(() => removeNotification(notification), 10000);
-  }
-
-  // Function to remove notifications
-  function removeNotification(element) {
-      element.classList.add('translate-x-full', 'opacity-0');
-      setTimeout(() => element.remove(), 500);
-  }
-});
-</script>
-
-<style>
-  /* CSS for notification borders (if you're not using Tailwind) */
-  .notification-accepted-border {
-      border-left-color: rgb(34, 197, 94);
-  }
-  .notification-rejected-border {
-      border-left-color: rgb(239, 68, 68);
-  }
-  .notification-accepted-bg {
-      background-color: rgb(240, 253, 244);
-  }
-  .notification-rejected-bg {
-      background-color: rgb(254, 242, 242);
-  }
-  .notification-accepted-text {
-      color: rgb(21, 128, 61);
-  }
-  .notification-rejected-text {
-      color: rgb(185, 28, 28);
-  }
-</style>
+    </script>
 
     @stack('styles')
     @stack('scripts')

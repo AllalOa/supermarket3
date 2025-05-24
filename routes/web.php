@@ -11,131 +11,127 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\FoyerController;
 use App\Models\Product;
 use App\Models\Order;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SupervisorNotificationController;
 
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
-
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
-Route::get('/supervisor/dashboard', function () {
-    return view('supervisor.dashboard');
-})->middleware(['auth', 'verified', 'rolemanager:supervisor'])->name('supervisor.dashboard');
-
-Route::get('/cashier/dashboard', function () {
-    return view('cashier.dashboard');
-})->middleware(['auth', 'verified', 'rolemanager:cashier'])->name('cashier.dashboard');
-
-Route::get('/magazinier/dashboard', function () {
-    return view('magazinier.dashboard');
-})->middleware(['auth', 'verified', 'rolemanager:magazinier'])->name('magazinier.dashboard');
-
-
-
-
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
 
-
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-
-
-// Apply role middleware to supervisor routes
-Route::middleware('rolemanager:supervisor')->group(function () {
-
-    Route::get('/supervisor/dashboard', [SupervisorDashboardController::class, 'index'])
-        ->name('supervisor.dashboard');
-
-    Route::get('/supervisor/cashiers', [SupervisorDashboardController::class, 'getCashiers'])
-        ->name('supervisor.cashiers');
-
-    Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'getMagaziniers'])
-        ->name('supervisor.magaziniers');
-
-    Route::get('/supervisor/low-stock-items', [SupervisorDashboardController::class, 'getLowStockItems'])
-        ->name('supervisor.lowStockItems');
-
-    Route::get('/inventory', function () {
-        return view('magazinier.inventory');
-    })->name('supervisor.inventory');
-
-    Route::get('/inventory', [ProductController::class, 'inventory'])->name('supervisor.inventory');
-
-
-    Route::get('/add-cashier', function () {
-        return view('supervisor.add-cashier');
-    })->name('add.cashier');
-
-    Route::get('/add-magazinier', function () {
-        return view('supervisor.add-magazinier');
-    })->name('add.magazinier');
-
-
-
-    Route::get('/analytics', function () {
-        return view('analytics');
-    })->name('analytics');
-
-    Route::get('/settings', function () {
-        return view('settings');
-    })->name('settings');
-    // Other supervisor routes...
-    Route::get('/supervisor/inventory', [InventoryController::class, 'index'])->name('supervisor.inventory');
-
-
-    Route::get('/supervisor/analytics', [AnalyticsController::class, 'analytics'])->name('supervisor.analytics');
-
+// Supervisor Routes
+Route::middleware(['auth', 'rolemanager:supervisor'])->group(function () {
+    // Dashboard
+    Route::get('/supervisor/dashboard', [SupervisorDashboardController::class, 'index'])->name('supervisor.dashboard');
+    
+    // User Management
+    Route::get('/supervisor/cashiers', [SupervisorDashboardController::class, 'getCashiers'])->name('supervisor.cashiers');
+    Route::get('/supervisor/magaziniers', [SupervisorDashboardController::class, 'getMagaziniers'])->name('supervisor.magaziniers');
     Route::post('/supervisor/promote-user', [SupervisorDashboardController::class, 'promoteUser'])->name('supervisor.promoteUser');
     Route::post('/supervisor/demote-user', [SupervisorDashboardController::class, 'demoteUser'])->name('supervisor.demoteUser');
     Route::get('/supervisor/promoted-users', [SupervisorDashboardController::class, 'getPromotedUsers'])->name('supervisor.promotedUserss');
+    
+    // Suspension Management
     Route::get('/supervisor/suspended-users', [SupervisorDashboardController::class, 'suspendedUsers'])->name('supervisor.suspendedUsers');
     Route::post('/supervisor/suspend', [SupervisorDashboardController::class, 'suspendUser'])->name('supervisor.suspendUser');
     Route::post('/supervisor/reinstate-user', [SupervisorDashboardController::class, 'reinstateUser'])->name('supervisor.reinstateUser');
+    
+    // Inventory Management
+    Route::get('/supervisor/inventory', [InventoryController::class, 'index'])->name('supervisor.inventory');
+    Route::get('/supervisor/low-stock-items', [SupervisorDashboardController::class, 'getLowStockItems'])->name('supervisor.lowStockItems');
+    
+    // Analytics
+    Route::get('/supervisor/analytics', [AnalyticsController::class, 'analytics'])->name('supervisor.analytics');
     Route::get('/orders/{id}', function ($id) {
         return Order::with('user')->findOrFail($id);
     });
     Route::get('/orders/{order}', [AnalyticsController::class, 'show']);
     Route::get('/order-details/{orderId}', [AnalyticsController::class, 'getOrderDetails']);
     Route::get('/all-activities', [AnalyticsController::class, 'getAllActivities']);
-
-
-
-   
     
+    // User Addition Views
+    Route::view('/add-cashier', 'supervisor.add-cashier')->name('add.cashier');
+    Route::view('/add-magazinier', 'supervisor.add-magazinier')->name('add.magazinier');
     
-
-
-     Route::get('/foyers', [FoyerController::class, 'index'])->name('supervisor.foyers');
+    // Foyer Management
+    Route::get('/foyers', [FoyerController::class, 'index'])->name('supervisor.foyers');
     Route::post('/foyers', [FoyerController::class, 'store'])->name('foyers.store');
     Route::get('/foyers/{id}', [FoyerController::class, 'show'])->name('foyers.show');
     Route::put('/foyers/{id}', [FoyerController::class, 'update'])->name('foyers.update');
     Route::get('/foyers/{id}/edit', [FoyerController::class, 'edit'])->name('foyers.edit');
     Route::delete('/foyers/{id}', [FoyerController::class, 'destroy'])->name('foyers.destroy');
     
-    // Chief and worker management routes
+    // Foyer User Management
     Route::get('/foyers/{id}/available-users', [FoyerController::class, 'getAvailableUsers'])->name('foyers.users.available');
-
     Route::get('/foyers/chiefs/available', [FoyerController::class, 'getAvailableChiefs'])->name('foyers.chiefs.available');
     Route::post('/foyers/{id}/workers', [FoyerController::class, 'addWorker'])->name('foyers.workers.add');
     Route::delete('/foyers/{foyerId}/workers/{userId}', [FoyerController::class, 'removeWorker'])->name('foyers.workers.remove');
-   
+    
+    // Settings
+    Route::view('/settings', 'settings')->name('settings');
+
+    // Notifications
+    Route::get('/notifications/dropdown', [SupervisorNotificationController::class, 'getDropdownData'])->name('supervisor.notifications.dropdown');
+    Route::post('/notifications/{notification}/mark-as-read', [SupervisorNotificationController::class, 'markAsRead'])->name('supervisor.notifications.markAsRead');
+    Route::get('/notifications', [SupervisorNotificationController::class, 'index'])->name('supervisor.notifications.index');
 });
+
+// Rest of your routes...
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Apply role middleware to cashier routes
+Route::middleware('rolemanager:cashier')->group(function () {
+
+    //cashier routes
+
+
+    Route::get('/startnewsale', function () {
+        return view('cashier.pos'); // Replace 'newsale' with the actual Blade view name
+    })->name('new.sale');
+
+
+
+    // Other cashier routes...
+    Route::get('/newsale', [TransactionController::class, 'showSalePage'])->middleware('auth')->name('cashier.sale');
+    Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
+    Route::get('/start-sale', [TransactionController::class, 'startNewSale'])->middleware('auth')->name('start.sale');
+    Route::get('/end-sale', [TransactionController::class, 'endTransaction'])->middleware('auth')->name('end.sale');
+
+
+    Route::get('/bill/{billId}/transactions', [TransactionController::class, 'getBillTransactions']);
+    Route::get('/cashier/transactions', [TransactionController::class, 'getAllTransactions'])->name('cashier.transactions');
+
+
+    Route::get('/cashier/dashboard', [TransactionController::class, 'dashboard'])->name('cashier.dashboard');
+
+    Route::post('/Order', [OrderController::class, 'createOrder'])->name('cashier.MakeAnOrder');
+
+    Route::get('/orders', [OrderController::class, 'listOrdersForMagazinier']);
+    Route::post('/orders/{order}/update', [OrderController::class, 'updateOrderStatus']);
+    Route::get('/cashier/orders', [OrderController::class, 'cashierOrders'])->name('cashier.orders');
+
+    Route::get('/get-product-price/{productId}', [ProductController::class, 'getProductPrice']);
+    Route::get('/MakeAnOrder', [ProductController::class, 'showDemandForm'])->name('MakeAnOrder');
+    Route::get('/pos', [App\Http\Controllers\POSController::class, 'index'])->name('pos.index');
+    Route::get('/pos/products', [App\Http\Controllers\POSController::class, 'getProducts'])->name('pos.products');
+    Route::get('/pos/product/barcode', [App\Http\Controllers\POSController::class, 'getProductByBarcode'])->name('pos.product.barcode');
+    Route::post('/pos/process-sale', [App\Http\Controllers\POSController::class, 'processSale'])->name('pos.process-sale');
+
+
+
+});
+
 
 // Apply role middleware to magazinier routes
 Route::middleware('rolemanager:magazinier')->group(function () {
@@ -169,57 +165,11 @@ Route::middleware('rolemanager:magazinier')->group(function () {
     Route::get('/magazinier/orders', [OrderController::class, 'showPendingOrders'])->name('magazinier.orders');
     Route::post('/orders/{id}/approve', [OrderController::class, 'validateOrder'])->name('orders.approve');
     Route::post('/orders/{id}/reject', [OrderController::class, 'rejectOrder'])->name('orders.reject');
+
+    // Notifications Routes
+    Route::get('/magazinier/notifications/pending-orders', [App\Http\Controllers\MagazinierController::class, 'getPendingOrderNotifications'])
+        ->name('magazinier.notifications.pending-orders');
 });
-
-
-
-
-
-
-
-// Apply role middleware to cashier routes
-Route::middleware('rolemanager:cashier')->group(function () {
-
-    //cashier routes
-
-
-    Route::get('/startnewsale', function () {
-        return view('cashier.pos'); // Replace 'newsale' with the actual Blade view name
-    })->name('new.sale');
-
-
-
-    // Other cashier routes...
-    Route::get('/newsale', [TransactionController::class, 'showSalePage'])->middleware('auth')->name('cashier.sale');
-    Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
-    Route::get('/start-sale', [TransactionController::class, 'startNewSale'])->middleware('auth')->name('start.sale');
-    Route::get('/end-sale', [TransactionController::class, 'endTransaction'])->middleware('auth')->name('end.sale');
-
-
-    Route::get('/bill/{billId}/transactions', [TransactionController::class, 'getBillTransactions']);
-
-
-    Route::get('/cashier/dashboard', [TransactionController::class, 'dashboard'])->name('cashier.dashboard');
-
-    Route::post('/Order', [OrderController::class, 'createOrder'])->name('cashier.MakeAnOrder');
-
-    Route::get('/orders', [OrderController::class, 'listOrdersForMagazinier']);
-    Route::post('/orders/{order}/update', [OrderController::class, 'updateOrderStatus']);
-    Route::get('/cashier/orders', [OrderController::class, 'cashierOrders'])->name('cashier.orders');
-
-    Route::get('/get-product-price/{productId}', [ProductController::class, 'getProductPrice']);
-    Route::get('/MakeAnOrder', [ProductController::class, 'showDemandForm'])->name('MakeAnOrder');
-    Route::get('/pos', [App\Http\Controllers\POSController::class, 'index'])->name('pos.index');
-    Route::get('/pos/products', [App\Http\Controllers\POSController::class, 'getProducts'])->name('pos.products');
-    Route::get('/pos/product/barcode', [App\Http\Controllers\POSController::class, 'getProductByBarcode'])->name('pos.product.barcode');
-    Route::post('/pos/process-sale', [App\Http\Controllers\POSController::class, 'processSale'])->name('pos.process-sale');
-
-
-
-});
-
-
-
 
 
 // test order
