@@ -13,6 +13,8 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SupervisorNotificationController;
+use App\Http\Controllers\MagazinierNotificationController;
+use App\Http\Controllers\CashierNotificationController;
 
 Route::post('/newsale', [TransactionController::class, 'addProductToBill'])->middleware('auth');
 
@@ -171,10 +173,23 @@ Route::middleware('rolemanager:magazinier')->group(function () {
         ->name('magazinier.notifications.pending-orders');
 });
 
+// Magazinier Notification Routes
+Route::middleware(['auth', 'rolemanager:magazinier'])->group(function () {
+    Route::get('/magazinier/notifications', [MagazinierNotificationController::class, 'index'])->name('magazinier.notifications');
+    Route::post('/notifications/{id}/mark-as-read', [MagazinierNotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::get('/magazinier/notifications/all', [MagazinierNotificationController::class, 'all'])->name('magazinier.notifications.all');
+});
 
 // test order
 
 
 Route::get('/get-product-price/{productName}', [ProductController::class, 'getProductPrice']);
+
+// Cashier Notification Routes
+Route::middleware(['auth', 'rolemanager:cashier'])->group(function () {
+    Route::get('/cashier/notifications', [CashierNotificationController::class, 'index'])->name('cashier.notifications');
+    Route::post('/notifications/{notification}/mark-as-read', [CashierNotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::get('/cashier/notifications/all', [CashierNotificationController::class, 'all'])->name('cashier.notifications.all');
+});
 
 require __DIR__ . '/auth.php';

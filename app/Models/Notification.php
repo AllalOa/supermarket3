@@ -8,12 +8,15 @@ class Notification extends Model
 {
     protected $fillable = [
         'user_id',
+        'title',
         'message',
+        'type',
+        'link',
         'is_read'
     ];
 
     protected $casts = [
-        'is_read' => 'boolean'
+        'is_read' => 'integer'
     ];
 
     public function user()

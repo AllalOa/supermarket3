@@ -8,7 +8,7 @@
         return moment(datetime).fromNow();
     },
     fetchNotifications() {
-        fetch('{{ route('magazinier.notifications') }}')
+        fetch('{{ route('cashier.notifications') }}')
             .then(response => response.json())
             .then(data => {
                 this.notifications = data.notifications;
@@ -157,7 +157,7 @@ x-init="fetchNotifications(); setInterval(() => fetchNotifications(), 30000)"
         <!-- Footer -->
         <div class="px-4 py-3 bg-gray-50 rounded-b-xl">
             <a 
-                href="{{ route('magazinier.notifications.all') }}"
+                href="{{ route('cashier.notifications.all') }}"
                 class="block w-full text-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             >
                 Voir toutes les notifications

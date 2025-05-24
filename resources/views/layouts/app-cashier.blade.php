@@ -175,52 +175,9 @@
                 <div class="flex items-center space-x-6">
                     <!-- Notifications -->
                     <div class="relative inline-block">
-            <button id="notifications-button" class="text-gray-500 hover:text-blue-600 transition duration-300 relative">
-              <i class="fas fa-bell text-lg"></i>
-              <span class="notification-badge flex h-5 w-5 items-center justify-center bg-red-500 text-white text-xs rounded-full">3</span>
-            </button>
-
-            <!-- Notifications Dropdown Menu -->
-            <div id="notifications-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-40">
-              <div class="px-4 py-3 border-b border-gray-100">
-                <div class="flex items-center justify-between">
-                  <p class="text-sm font-medium">Notifications</p>
-                  <span class="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">3 new</span>
-                </div>
-              </div>
-              <!-- Sample Notifications -->
-              <div class="max-h-96 overflow-y-auto">
-                <!-- Unread notification -->
-                <div class="px-4 py-3 hover:bg-gray-50 border-l-4 border-blue-500">
-                  <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0">
-                      <i class="fas fa-box text-blue-500"></i>
+                        @include('partials.cashier-notification-dropdown')
                     </div>
-                    <div class="flex-1">
-                      <p class="text-sm text-gray-800">Low stock alert for Product XYZ</p>
-                      <p class="text-xs text-gray-500">2 minutes ago</p>
-                    </div>
-                  </div>
-                </div>
-                <!-- Read notification -->
-                <div class="px-4 py-3 hover:bg-gray-50">
-                  <div class="flex items-center space-x-3">
-                    <div class="flex-shrink-0">
-                      <i class="fas fa-check-circle text-green-500"></i>
-                    </div>
-                    <div class="flex-1">
-                      <p class="text-sm text-gray-600">Inventory update completed</p>
-                      <p class="text-xs text-gray-500">1 hour ago</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="border-t border-gray-100 p-2">
-                <a href="#" class="block text-center text-sm text-blue-600 hover:text-blue-700 font-medium">View all notifications</a>
-              </div>
-            </div>
-          </div>
-
+                    
                     <!-- User Profile -->
                     <div class="relative">
                         <button id="user-menu-button" class="flex items-center space-x-3 focus:outline-none">
