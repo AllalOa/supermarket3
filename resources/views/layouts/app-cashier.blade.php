@@ -376,7 +376,7 @@
         setTimeout(() => notification.classList.remove('translate-x-full', 'opacity-0'), 10);
         
         // Auto-remove after 5 seconds
-        setTimeout(() => removeNotification(notification), 10000);
+        setTimeout(() => removeNotification(notification), 100000);
     }
 
     function removeNotification(element) {

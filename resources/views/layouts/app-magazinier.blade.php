@@ -341,7 +341,7 @@
           // Set up auto-removal timer
           const timeoutId = setTimeout(() => {
               removeNotification(notification);
-          }, 5000);
+          }, 100000);
           
           // Setup close button functionality
           closeBtn.addEventListener('click', () => {

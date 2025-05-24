@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => notification.classList.remove('translate-x-full', 'opacity-0'), 10);
       
       // Auto-remove after 10 seconds
-      setTimeout(() => removeNotification(notification), 10000);
+      setTimeout(() => removeNotification(notification), 100000);
   }
 
   // Function to remove notifications
