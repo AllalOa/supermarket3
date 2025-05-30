@@ -34,7 +34,7 @@
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-bold text-[#2b2d42]">Supermarket Pro</h2>
                 <p class="text-sm text-gray-500">123 Main Street, City</p>
-                <p class="text-sm text-gray-500 mt-2">Tel: (555) 123-4567</p>
+                <p class="text-sm text-gray-500 mt-2">Tel: {{ auth()->user()->phone ?? '(Not Available)' }}</p>
             </div>
 
             <div class="mb-4">

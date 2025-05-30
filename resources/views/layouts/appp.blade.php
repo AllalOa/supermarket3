@@ -140,7 +140,7 @@
                     class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                     <i class="fas fa-store text-white"></i>
                 </div>
-                <span class="text-xl font-semibold text-gray-800">Supermarket Pro</span>
+                <span class="text-xl font-semibold text-gray-800">Gestion De Foyer</span>
             </div>
         </div>
 

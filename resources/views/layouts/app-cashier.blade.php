@@ -47,11 +47,47 @@
         .sidebar {
             transition: all 0.3s ease-in-out;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 5rem;
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 16rem;
+        }
+
+        .sidebar .logo-text {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .logo-text {
+            opacity: 1;
         }
 
         .menu-item {
             border-radius: 0.5rem;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item i {
+            min-width: 2rem;
+            text-align: center;
+            font-size: 1.25rem;
+            transition: margin 0.3s ease;
+        }
+
+        .menu-item span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar:hover .menu-item span {
+            opacity: 1;
         }
 
         .menu-item:hover {
@@ -90,6 +126,12 @@
 
             .sidebar.open {
                 transform: translateX(0);
+                width: 16rem;
+            }
+
+            .sidebar.open .logo-text,
+            .sidebar.open .menu-item span {
+                opacity: 1;
             }
         }
     </style>
@@ -97,65 +139,62 @@
 
 <body class="bg-gray-50 text-gray-800 min-h-screen flex">
 
-    <!-- Sidebar - Styled like template 2 but keeping structure from template 1 -->
-    <aside class="sidebar w-64 fixed h-screen bg-white shadow-xl z-30">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed h-screen bg-white shadow-xl z-30">
         <!-- Logo -->
-        <div class="p-5 border-b border-gray-100">
-            <div class="flex items-center space-x-3">
-                <div
-                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                    <i class="fas fa-store text-white"></i>
+        <div class="p-4 border-b border-gray-100">
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-110">
+                    <i class="fas fa-store text-white text-xl"></i>
                 </div>
-                <span class="text-xl font-semibold text-gray-800">Supermarket Pro</span>
+                <span class="logo-text text-lg font-semibold text-gray-800 mt-2 text-center whitespace-nowrap">Gestion de foyer</span>
             </div>
         </div>
 
-        <!-- Navigation Menu for Cashier - keeping original menu items but with new styling -->
+        <!-- Navigation Menu -->
         <nav class="p-4">
-            <ul class="space-y-1">
+            <ul class="space-y-2">
                 <li>
                     <a href="{{ route('cashier.dashboard') }}"
-                        class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('cashier.dashboard') ? 'active' : 'text-gray-700' }}">
-                        <i class="fas fa-cash-register w-5 mr-3"></i> POS System
+                        class="menu-item {{ request()->routeIs('cashier.dashboard') ? 'active' : 'text-gray-700' }}">
+                        <i class="fas fa-cash-register"></i>
+                        <span class="ml-3">POS System</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('MakeAnOrder') }}"
-                        class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('MakeAnOrder') ? 'active' : 'text-gray-700' }}">
-                        <i class="fas fa-shopping-cart w-5 mr-3"></i> Make an Order
-                        <span class="ml-auto px-2 py-1 text-xs bg-blue-500 text-white rounded-full">New</span>
+                        class="menu-item {{ request()->routeIs('MakeAnOrder') ? 'active' : 'text-gray-700' }}">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="ml-3">Make an Order</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('cashier.orders') }}"
-                        class="menu-item flex items-center p-3 text-sm font-medium {{ request()->routeIs('cashier.orders') ? 'active' : 'text-gray-700' }}">
-                        <i class="fas fa-history w-5 mr-3"></i> My Orders History
+                        class="menu-item {{ request()->routeIs('cashier.orders') ? 'active' : 'text-gray-700' }}">
+                        <i class="fas fa-history"></i>
+                        <span class="ml-3">Orders History</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                        class="menu-item flex items-center p-3 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        <i class="fas fa-cog w-5 mr-3"></i> Settings
+                    <a href="#" class="menu-item text-gray-700">
+                        <i class="fas fa-cog"></i>
+                        <span class="ml-3">Settings</span>
                     </a>
                 </li>
             </ul>
         </nav>
-       
-
    
         <!-- Promotional Banner -->
-        <div class="p-4 mt-8">
+        <div class="p-4 mt-8 opacity-0 sidebar-hover:opacity-100 transition-opacity duration-300">
             <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-100">
                 <p class="text-sm text-gray-700 mb-3">Need help with transactions?</p>
-                <button
-                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-sm font-medium">Quick
-                    Guide</button>
+                <button class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-sm font-medium">Quick Guide</button>
             </div>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 ml-0 md:ml-64 transition-all duration-300 flex flex-col">
+    <main class="flex-1 ml-20 transition-all duration-300 flex flex-col">
         <!-- Top Navigation - Styled like template 2 but keeping structure from template 1 -->
         <header class="bg-white sticky top-0 z-20 shadow-sm">
             <div class="flex items-center justify-between px-6 py-4">

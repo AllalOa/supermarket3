@@ -23,7 +23,7 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
-                <p class="text-gray-600 mt-1">Welcome back, Alex! Here's what's happening today.</p>
+                <p class="text-gray-600 mt-1">Welcome back, Here's what's happening today.</p>
             </div>
             <div class="mt-4 md:mt-0 space-y-2 md:space-y-0 md:flex md:space-x-2">
                 <button
@@ -97,9 +97,7 @@
                             <span class="text-gray-500 ml-2"></span>
                         </div>
                     </div>
-                    <div class="bg-red-50 p-3 rounded-lg">
-                        <i class="fas fa-dollar-sign text-xl text-red-500"></i>
-                    </div>
+                   
                 </div>
             </div>
         </div>

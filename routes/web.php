@@ -94,15 +94,13 @@ Route::middleware('auth')->group(function () {
 
 // Apply role middleware to cashier routes
 Route::middleware('rolemanager:cashier')->group(function () {
-
     //cashier routes
-
-
-    Route::get('/startnewsale', function () {
-        return view('cashier.pos'); // Replace 'newsale' with the actual Blade view name
-    })->name('new.sale');
-
-
+    Route::get('/startnewsale', [App\Http\Controllers\POSController::class, 'index'])->name('new.sale');
+    
+    // POS API Routes
+    Route::get('/pos/product/{barcode}', [App\Http\Controllers\POSController::class, 'getProductByBarcode']);
+    Route::get('/pos/search', [App\Http\Controllers\POSController::class, 'searchProducts']);
+    Route::post('/pos/checkout', [App\Http\Controllers\POSController::class, 'checkout']);
 
     // Other cashier routes...
     Route::get('/newsale', [TransactionController::class, 'showSalePage'])->middleware('auth')->name('cashier.sale');
@@ -110,10 +108,8 @@ Route::middleware('rolemanager:cashier')->group(function () {
     Route::get('/start-sale', [TransactionController::class, 'startNewSale'])->middleware('auth')->name('start.sale');
     Route::get('/end-sale', [TransactionController::class, 'endTransaction'])->middleware('auth')->name('end.sale');
 
-
     Route::get('/bill/{billId}/transactions', [TransactionController::class, 'getBillTransactions']);
     Route::get('/cashier/transactions', [TransactionController::class, 'getAllTransactions'])->name('cashier.transactions');
-
 
     Route::get('/cashier/dashboard', [TransactionController::class, 'dashboard'])->name('cashier.dashboard');
 
@@ -130,10 +126,7 @@ Route::middleware('rolemanager:cashier')->group(function () {
     Route::get('/pos/product/barcode', [App\Http\Controllers\POSController::class, 'getProductByBarcode'])->name('pos.product.barcode');
     Route::post('/pos/process-sale', [App\Http\Controllers\POSController::class, 'processSale'])->name('pos.process-sale');
 
-
-
 });
-
 
 // Apply role middleware to magazinier routes
 Route::middleware('rolemanager:magazinier')->group(function () {
@@ -151,12 +144,10 @@ Route::middleware('rolemanager:magazinier')->group(function () {
     Route::get('/products/create', [ProductController::class, 'create'])->name('addProduct');
     Route::post('/products/store', [ProductController::class, 'store'])->name('storeProduct');
 
-
     //fetching product information
     Route::get('/inventory', [ProductController::class, 'inventory'])->name('magazinier.inventory');
 
     Route::get('/magazinier/dashboard', [ProductController::class, 'index'])->name('magazinier.dashboard');
-
 
     //product deleate/update
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
@@ -178,10 +169,10 @@ Route::middleware(['auth', 'rolemanager:magazinier'])->group(function () {
     Route::get('/magazinier/notifications', [MagazinierNotificationController::class, 'index'])->name('magazinier.notifications');
     Route::post('/notifications/{id}/mark-as-read', [MagazinierNotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
     Route::get('/magazinier/notifications/all', [MagazinierNotificationController::class, 'all'])->name('magazinier.notifications.all');
+    Route::get('/magazinier/notifications/dropdown', [MagazinierNotificationController::class, 'index'])->name('magazinier.notifications.dropdown');
 });
 
 // test order
-
 
 Route::get('/get-product-price/{productName}', [ProductController::class, 'getProductPrice']);
 

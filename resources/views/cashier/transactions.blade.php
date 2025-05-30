@@ -163,7 +163,7 @@
                 <div class="receipt-header">
                     <h2 class="text-xl font-bold mb-1">{{ $user->foyer->name ?? 'Supermarket Pro' }}</h2>
                     <p class="text-gray-600">{{ $user->foyer->address ?? 'Main Street, City' }}</p>
-                    <p class="text-gray-600">Tel: (123) 456-7890</p>
+                    <p class="text-gray-600">Tel: {{ auth()->user()->phone ?? '(Not Available)' }}</p>
                 </div>
                 <div class="receipt-info">
                     <p>Bill #<span id="modalBillId" class="font-medium"></span></p>
