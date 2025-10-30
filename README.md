@@ -52,13 +52,13 @@ This system makes it easy to monitor sales, refill requests, and stock levels ac
 ## 🖼️ Screenshots
 
 ### 🏠 Supervisor Dashboard
-![Dashboard Screenshot](images/La vue de Superviseur.png)
+![Dashboard Screenshot](images/Supervisor-Dashboard.png)
 
 ### 🏪 Supermarket Management
-![Supermarket Screenshot](images/La Gestion de point de vente.png)
+![Supermarket Screenshot](images/Markets.png)
 
 ### 📦 Magaziner Stock
-![Stock Screenshot](images/La gestion de stock.png)
+![Stock Screenshot](images/Stock-Management.png)
 
 ### 👩‍💻 POS / Cashier Interface
 ![POS Screenshot](images/pos.png)
