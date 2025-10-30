@@ -58,10 +58,11 @@ This system makes it easy to monitor sales, refill requests, and stock levels ac
 ### 📦 Magaziner Stock
 ![Stock Screenshot](images/Stock-Management.png)
 
-### 👩‍💻 POS / Cashier Interface
+### 👩‍💻 POS 
 ![POS Screenshot](images/pos.png)
+
 ### 👩‍💻 Cashier Interface
-![Caissier-Dashboard Screenshot](Caissier-Dashboard/pos.png)
+![Caissier-Dashboard Screenshot](images/Caissier-Dashboard.png)
 ---
 
 ## ⚙️ Tech Stack
