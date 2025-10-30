@@ -60,7 +60,8 @@ This system makes it easy to monitor sales, refill requests, and stock levels ac
 
 ### 👩‍💻 POS / Cashier Interface
 ![POS Screenshot](images/pos.png)
-
+### 👩‍💻 Cashier Interface
+![Caissier-Dashboard Screenshot](Caissier-Dashboard/pos.png)
 ---
 
 ## ⚙️ Tech Stack
