@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="images/logo.png" width="120" alt="Supermarket Pro Logo">
-</p>
+
 
 <h1 align="center">🛒 Supermarket Management System (Multi-Branch)</h1>
 <p align="center">
